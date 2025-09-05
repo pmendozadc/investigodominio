@@ -1,31 +1,66 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
 
+import java.util.Date;
+
+@Data
+@Table(name = "proyecto")
 @Entity
 public class Proyecto {
 
 	@Id
+	@Column(name = "id")
 	private int id;
-	
+
+	@Column(name = "nombre")
 	private String nombre;
+	@Column(name = "email_lider")
+	private String emailLider;
+	@Column(name = "id_carpeta")
+	private String idCarpeta;
+	@Column(name = "objetivo_general")
+	private String objetivoGeneral;
+	@Column(name = "fechaCreacion")
+	private Date fechaCreacion;
+	@Column(name = "fecha_inicio")
+	private Date fechaInicio;
+	@Column(name = "fecha_fin")
+	private Date fechaFin;
+	@Column(name = "id_tipo_proyecto")
+	private Integer tipoProyecto;
+	@Column(name = "id_hoja_seguimiento")
+	private Integer idHojaSeguimiento;
+	@Column(name = "id_grupo_asignado")
+	private Integer idGrupoAsignado;
+	@Column(name = "id_estado_proyecto")
+	private Integer idEstadoProyecto;
 
-	public int getId() {
-		return id;
+	@Column(name = "created_by")
+	private Integer createBy;
+	@Column(name = "created_date")
+	private Date createdDate;
+	@Column(name = "modified_by")
+	private Integer modifiedBy;
+	@Column(name = "modified_date")
+	private Date modifiedDate;
+
+	public Proyecto() {
+
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
+	public Proyecto(
+			String nombre,
+			String objetivoGeneral,
+			Date fechaCreacion,
+			Integer tipoProyecto
+	) {
 		this.nombre = nombre;
+		this.objetivoGeneral = objetivoGeneral;
+		this.fechaCreacion = fechaCreacion;
+		this.tipoProyecto = tipoProyecto;
 	}
-	
-	
 }

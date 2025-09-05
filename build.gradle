@@ -24,6 +24,13 @@ dependencies {
 	implementation("org.postgresql:postgresql:42.7.3")  
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Agrega los getters y setters a las entidades
+	implementation 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+	testCompileOnly 'org.projectlombok:lombok:1.18.34'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
 }
 
 tasks.named('test') {
