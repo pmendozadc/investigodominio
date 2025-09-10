@@ -3,10 +3,16 @@ package pe.edu.universidad.investigodominio.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 public class UtilClases {
+
+	private static final String strDosPunto = ":";
+	private static final String strAmericaLima = "America/Lima";
 
 	public static Object obtenerObjeto(String nombreCompleto, Map<String, Object> map) {
 		Class aclass = obtenerClase(nombreCompleto);
@@ -34,9 +40,19 @@ public class UtilClases {
 	public static Object copiarData(Object obj, Map<String, Object> map) {
 		try {
 			for (String k : map.keySet()) {
-				Field campo = obj.getClass().getDeclaredField(k);
+				String nombreCampo = k;
+				Object valor = map.get(k);
+				if (nombreCampo.startsWith(strDosPunto)) {
+					ZoneId zonaLima = ZoneId.of(strAmericaLima);
+			        LocalDateTime fechaLocal = LocalDateTime.parse(valor.toString());
+			        ZonedDateTime fechaZoned = fechaLocal.atZone(zonaLima);
+			        OffsetDateTime fechaOffset = fechaZoned.toOffsetDateTime();
+			        valor = fechaOffset;
+			        nombreCampo = nombreCampo.substring(1);
+				}
+				Field campo = obj.getClass().getDeclaredField(nombreCampo);
 				campo.setAccessible(true);  // permitir acceso si es privado
-				campo.set(obj, map.get(k));
+				campo.set(obj, valor);
 			}
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
