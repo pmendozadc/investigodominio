@@ -1,7 +1,8 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,16 +24,16 @@ public class Usuario {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private boolean status = true;
+    private boolean estado = true;
 
-    private LocalDateTime createdDate;
+    private OffsetDateTime createdDate;
 
     @ManyToOne
     @JoinColumn(name = "created_by")
     @JsonIgnore
     private Usuario createdBy;
 
-    private LocalDateTime modifiedDate;
+    private OffsetDateTime modifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "modified_by")
@@ -41,6 +42,7 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn(name = "rol_id", nullable = false)
+    @JsonIgnore
     private Rol rol;
 
     // Getters y setters
@@ -59,17 +61,17 @@ public class Usuario {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public boolean getStatus() { return status; }
-    public void setStatus(boolean status) { this.status = status; }
+    public boolean getEstado() { return estado; }
+    public void setEstado(boolean estado) { this.estado = estado; }
 
-    public LocalDateTime getCreatedDate() { return createdDate; }
-    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+    public OffsetDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(OffsetDateTime createdDate) { this.createdDate = createdDate; }
 
     public Usuario getCreatedBy() { return createdBy; }
     public void setCreatedBy(Usuario createdBy) { this.createdBy = createdBy; }
 
-    public LocalDateTime getModifiedDate() { return modifiedDate; }
-    public void setModifiedDate(LocalDateTime modifiedDate) { this.modifiedDate = modifiedDate; }
+    public OffsetDateTime getModifiedDate() { return modifiedDate; }
+    public void setModifiedDate(OffsetDateTime modifiedDate) { this.modifiedDate = modifiedDate; }
 
     public Usuario getModifiedBy() { return modifiedBy; }
     public void setModifiedBy(Usuario modifiedBy) { this.modifiedBy = modifiedBy; }
@@ -81,5 +83,9 @@ public class Usuario {
     public Integer getCreatedById() {
         return createdBy != null ? createdBy.getId() : null;
     }
-    
+
+    @JsonProperty("rolId")
+    public Integer getRolId() {
+        return rol != null ? rol.getId() : null;
+    }
 }
