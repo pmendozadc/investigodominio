@@ -20,7 +20,7 @@ CREATE TABLE proyecto(
     id                      SERIAL PRIMARY KEY,
     nombre                  VARCHAR(200),
     email_lider             VARCHAR(200),
-    id_carperta             VARCHAR(200),
+    id_carpeta             VARCHAR(200),
     objetivo_general        VARCHAR(500),
     fecha_creacion          TIMESTAMPTZ,
     fecha_inicio            TIMESTAMPTZ,
@@ -75,3 +75,26 @@ CREATE TABLE documento_proyecto(
     modified_date           TIMESTAMPTZ
 );
 
+insert into tipo_proyecto (nombre, created_by, created_date, modified_by, modified_date )
+values (
+        'Proyecto Interno', 1, now(), null, null
+);
+
+insert into proyecto
+( nombre, email_lider, id_carpeta, objetivo_general, fecha_creacion, fecha_inicio, fecha_fin, id_tipo_proyecto, id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by, created_date, modified_by, modified_date)
+values (
+        'Proyecto 1','lider@mail.com', 'asdf', 'objetivo general 1', now(), null, null, 1, null, null, null, 1, now(), null, null
+       );
+
+insert into documento_proyecto (titulo, tiene_marcadores, id_proyecto, created_by, created_date, modified_by, modified_date)
+values (
+        'documento 1', false, 1, 1, now(), null, null
+       );
+
+insert into proyecto_objetivo_especifico (objetivo_especifico, id_proyecto, created_by, created_date, modified_by, modified_date)
+values ('Objetivo específico 1', 1, 1, now(), null, null);
+
+select * from tipo_proyecto;
+select * from proyecto;
+select * from documento_proyecto;
+select * from proyecto_objetivo_especifico;
