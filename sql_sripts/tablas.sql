@@ -9,9 +9,9 @@ SELECT
     column_default,
     is_nullable
 FROM
-    information_schema.columns
+    information_schema.columns c
 WHERE
-    table_name = 'proyecto';
+    table_name = 'tmp';
 
 DROP TABLE IF EXISTS proyecto;
 
