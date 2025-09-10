@@ -12,8 +12,31 @@ import pe.edu.universidad.investigodominio.util.UtilClases;
 
 public class TestUtilClases {
 
+	private static final String strClaseDominio = "pe.edu.universidad.investigodominio.dominio.";
+	
 	private static final String strClaseProyecto = "pe.edu.universidad.investigodominio.dominio.Proyecto";
 
+	@Test
+	public void testClaseInexistente() {
+		try {
+			Class aclass = UtilClases.obtenerClase(strClaseDominio+"Inexistente");
+		} catch (Exception e) {
+			assertEquals(ClassNotFoundException.class, e.getCause().getClass());
+		}
+	}
+	
+	@Test
+	public void testObjetoClaseInexistente() {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", "1");
+		map.put("nombre", "Proyecto de ejemplo");
+		try {
+			Object obj = UtilClases.obtenerObjeto(strClaseDominio+"Inexistente", map );
+		} catch (Exception e) {
+			assertEquals(ClassNotFoundException.class, e.getCause().getClass());
+		}
+	}
+	
 	@Test
 	public void testCrearProyectoMinimo() {
 		Map<String, Object> map = new HashMap<String, Object>();

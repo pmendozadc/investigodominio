@@ -23,10 +23,18 @@ public class ServiceGenerico {
 		return opt;
 	}
 	
-	public Object insert(String entidadNombre, Map<String, Object> map) {
+	public Object create(String entidadNombre, Map<String, Object> map) {
 		Object obj = repoGenerico.insert(entidadNombre, map);
 		return obj;
 	}
 	
+	public Optional update(String entidadNombre, Map<String, Object> map) {
+		Optional opt = repoGenerico.update(entidadNombre, map);
+		return opt;
+	}
 	
+	public Optional delete(String entidadNombre, int id) {
+		Optional opt = repoGenerico.delete(entidadNombre, id);
+		return opt;
+	}
 }
