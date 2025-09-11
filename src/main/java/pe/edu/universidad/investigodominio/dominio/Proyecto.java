@@ -1,5 +1,7 @@
 package pe.edu.universidad.investigodominio.dominio;
 
+import java.time.OffsetDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -11,6 +13,8 @@ public class Proyecto {
 	
 	private String nombre;
 
+	private OffsetDateTime fechaInicio;
+	
 	public int getId() {
 		return id;
 	}
@@ -25,6 +29,14 @@ public class Proyecto {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public OffsetDateTime getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(OffsetDateTime fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 	
 	
