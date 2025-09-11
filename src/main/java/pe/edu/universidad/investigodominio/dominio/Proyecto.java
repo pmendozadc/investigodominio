@@ -30,6 +30,9 @@ public class Proyecto {
 	private Date fechaInicio;
 	@Column(name = "fecha_fin")
 	private Date fechaFin;
+	@Column(name = "estado")
+	private String estado;
+
 	@Column(name = "id_tipo_proyecto")
 	private Integer tipoProyecto;
 	@Column(name = "id_hoja_seguimiento")
@@ -40,7 +43,7 @@ public class Proyecto {
 	private Integer idEstadoProyecto;
 
 	@Column(name = "created_by")
-	private Integer createBy;
+	private Integer createdBy;
 	@Column(name = "created_date")
 	private Date createdDate;
 	@Column(name = "modified_by")

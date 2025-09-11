@@ -15,11 +15,14 @@ public class TipoProyecto {
     @Id
     @Column(name = "id")
     Integer id;
+
     @Column(name = "nombre")
     String nombre;
+    @Column(name = "estado")
+    private String estado;
 
     @Column(name = "created_by")
-    private Integer createBy;
+    private Integer createdBy;
     @Column(name = "created_date")
     private Date createdDate;
     @Column(name = "modified_by")

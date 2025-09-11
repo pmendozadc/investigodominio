@@ -41,16 +41,18 @@ CREATE TABLE proyecto(
     modified_date           TIMESTAMPTZ
 );
 
+DROP SEQUENCE IF EXISTS secuencia_proyecto;
+
 CREATE SEQUENCE secuencia_proyecto
     START WITH 101
     INCREMENT BY 1
     MINVALUE 101
     MAXVALUE 999999;
 
-ALTER TABLE 
-    proyecto 
-ALTER 
-    COLUMN id 
+ALTER TABLE
+    proyecto
+ALTER
+    COLUMN id
     SET DEFAULT nextval('secuencia_proyecto');
 
 -- ------- Tabla tipo_proyecto -----------------------------
@@ -65,16 +67,18 @@ CREATE TABLE tipo_proyecto(
     modified_date           TIMESTAMPTZ
 );
 
+DROP SEQUENCE IF EXISTS secuencia_tipo_proyecto;
+
 CREATE SEQUENCE secuencia_tipo_proyecto
     START WITH 101
     INCREMENT BY 1
     MINVALUE 101
     MAXVALUE 999999;
 
-ALTER TABLE 
-    tipo_proyecto 
-ALTER 
-    COLUMN id 
+ALTER TABLE
+    tipo_proyecto
+ALTER
+    COLUMN id
     SET DEFAULT nextval('secuencia_tipo_proyecto');
 
 -- ------- Tabla proyecto_objetivo_especifico --------------
@@ -91,16 +95,18 @@ CREATE TABLE proyecto_objetivo_especifico(
     modified_date           TIMESTAMPTZ
 );
 
+DROP SEQUENCE IF EXISTS secuencia_proyecto_objetivo_especifico;
+
 CREATE SEQUENCE secuencia_proyecto_objetivo_especifico
     START WITH 101
     INCREMENT BY 1
     MINVALUE 101
     MAXVALUE 999999;
 
-ALTER TABLE 
+ALTER TABLE
     proyecto_objetivo_especifico
-ALTER 
-    COLUMN id 
+ALTER
+    COLUMN id
     SET DEFAULT nextval('secuencia_proyecto_objetivo_especifico');
 
 -- ------- Tabla documento_proyecto ------------------------
@@ -118,16 +124,18 @@ CREATE TABLE documento_proyecto(
     modified_date           TIMESTAMPTZ
 );
 
+DROP SEQUENCE IF EXISTS secuencia_documento_proyecto;
+
 CREATE SEQUENCE secuencia_documento_proyecto
     START WITH 101
     INCREMENT BY 1
     MINVALUE 101
     MAXVALUE 999999;
 
-ALTER TABLE 
+ALTER TABLE
     documento_proyecto
-ALTER 
-    COLUMN id 
+ALTER
+    COLUMN id
     SET DEFAULT nextval('secuencia_documento_proyecto');
 
 -- ---------- Funciones para los triggers ----------------
@@ -135,27 +143,35 @@ ALTER
 CREATE OR REPLACE FUNCTION actualizar_modified_date()
 RETURNS TRIGGER AS $$
 BEGIN
+    RAISE NOTICE 'Trigger activado: actualizar_modified_date';
     NEW.modified_date = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 -- ----------- Triggers ----------------------------------
+DROP TRIGGER IF EXISTS trigger_actualizar_proyecto ON proyecto;
 
 CREATE TRIGGER trigger_actualizar_proyecto
 BEFORE UPDATE ON proyecto
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
 
+DROP TRIGGER IF EXISTS trigger_actualizar_tipo_proyecto ON tipo_proyecto;
+
 CREATE TRIGGER trigger_actualizar_tipo_proyecto
 BEFORE UPDATE ON tipo_proyecto
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
 
+DROP TRIGGER IF EXISTS trigger_actualizar_proyecto_objetivo_especifico ON proyecto_objetivo_especifico;
+
 CREATE TRIGGER trigger_actualizar_proyecto_objetivo_especifico
 BEFORE UPDATE ON proyecto_objetivo_especifico
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
+
+DROP TRIGGER IF EXISTS trigger_actualizar_documento_proyecto ON documento_proyecto;
 
 CREATE TRIGGER trigger_actualizar_documento_proyecto
 BEFORE UPDATE ON documento_proyecto
@@ -164,25 +180,25 @@ EXECUTE FUNCTION actualizar_modified_date();
 
 -- ---------- Mock Data-----------------------------------
 
-insert into tipo_proyecto 
+insert into tipo_proyecto
 (nombre, created_by)
 values (
         'Proyecto Interno', 1
 );
 
 insert into proyecto
-(nombre, email_lider, id_carpeta, objetivo_general, fecha_creacion, fecha_inicio, fecha_fin, id_tipo_proyecto, id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by)
+(nombre, email_lider, id_carpeta, objetivo_general, fecha_inicio, fecha_fin, id_tipo_proyecto, id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by)
 values (
     'Proyecto 1','lider@mail.com', 'asdf', 'objetivo general 1', null, null, 1, null, null, null, 1
 );
 
-insert into documento_proyecto 
+insert into documento_proyecto
 (titulo, tiene_marcadores, id_proyecto, created_by)
 values (
     'documento 1', false, 1, 1
 );
 
-insert into proyecto_objetivo_especifico 
+insert into proyecto_objetivo_especifico
 (objetivo_especifico, id_proyecto, created_by)
 values (
     'Objetivo específico 1', 1, 1
@@ -192,3 +208,7 @@ select * from tipo_proyecto;
 select * from proyecto;
 select * from documento_proyecto;
 select * from proyecto_objetivo_especifico;
+
+update tipo_proyecto set nombre='Proyecto Interno Test' where id=101;
+
+select * from tipo_proyecto;

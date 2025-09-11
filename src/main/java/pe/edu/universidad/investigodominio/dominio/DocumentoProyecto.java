@@ -21,13 +21,15 @@ public class DocumentoProyecto {
     private String titulo;
     @Column(name = "tiene_marcadores")
     private Boolean tieneMarcadores;
+    @Column(name = "estado")
+    private String estado;
 
     // Foreign keys
     @Column(name = "id_proyecto")
     private Integer idProyecto;
 
     @Column(name = "created_by")
-    private Integer createBy;
+    private Integer createdBy;
     @Column(name = "created_date")
     private Date createdDate;
     @Column(name = "modified_by")
