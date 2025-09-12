@@ -16,9 +16,6 @@ public class Grupo {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "fecha_creacion")
-    private ZonedDateTime fechaCreacion;  // CamelCase + ZonedDateTime
-
     @Column(name = "estado")
     private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
 
@@ -54,14 +51,6 @@ public class Grupo {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public ZonedDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(ZonedDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
     }
 
     public Boolean getEstado() {
