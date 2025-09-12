@@ -1,5 +1,7 @@
 package pe.edu.universidad.investigodominio.dominio;
 
+import java.time.OffsetDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,11 +27,11 @@ public class Proyecto {
 	@Column(name = "objetivo_general")
 	private String objetivoGeneral;
 	@Column(name = "fechaCreacion")
-	private Date fechaCreacion;
+	private OffsetDateTime fechaCreacion;
 	@Column(name = "fecha_inicio")
-	private Date fechaInicio;
+	private OffsetDateTime fechaInicio;
 	@Column(name = "fecha_fin")
-	private Date fechaFin;
+	private OffsetDateTime fechaFin;
 	@Column(name = "estado")
 	private String estado;
 
@@ -45,11 +47,11 @@ public class Proyecto {
 	@Column(name = "created_by")
 	private Integer createdBy;
 	@Column(name = "created_date")
-	private Date createdDate;
+	private OffsetDateTime createdDate;
 	@Column(name = "modified_by")
 	private Integer modifiedBy;
 	@Column(name = "modified_date")
-	private Date modifiedDate;
+	private OffsetDateTime modifiedDate;
 
 	public Proyecto() {
 
@@ -66,4 +68,6 @@ public class Proyecto {
 		this.fechaCreacion = fechaCreacion;
 		this.tipoProyecto = tipoProyecto;
 	}
+	
+	
 }
