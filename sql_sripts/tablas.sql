@@ -144,7 +144,7 @@ CREATE OR REPLACE FUNCTION actualizar_modified_date()
 RETURNS TRIGGER AS $$
 BEGIN
     RAISE NOTICE 'Trigger activado: actualizar_modified_date';
-    NEW.modified_date = CURRENT_TIMESTAMP;
+    NEW.modified_date = (CURRENT_TIMESTAMP AT TIME ZONE 'America/Lima')::timestamptz;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
