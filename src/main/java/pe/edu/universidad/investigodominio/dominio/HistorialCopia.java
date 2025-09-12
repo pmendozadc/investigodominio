@@ -1,103 +1,36 @@
 package pe.edu.universidad.investigodominio.dominio;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 import java.time.OffsetDateTime;
 
+@Data
+@Table(name = "historial_copia")
 @Entity
 public class HistorialCopia {
 
     @Id
-    private int idHistorialCopia;
+    @Column(name = "id")
+    private int id;
 
-    private int idReparto;
-    private int idCopia;
-    private int idPlantilla;
+    @Column(name = "email")
     private String email;
+    @Column(name = "fecha_archivado")
     private OffsetDateTime fechaArchivado;
+    @Column(name = "estado")
+    private boolean estado;
+
+    @Column(name = "created_by")
     private int createdBy;
+    @Column(name = "created_date")
     private OffsetDateTime createdDate;
+    @Column(name = "modified_by")
     private int modifiedBy;
+    @Column(name = "modified_date")
     private OffsetDateTime modifiedDate;
 
-    public int getIdHistorialCopia() {
-        return idHistorialCopia;
-    }
-
-    public void setIdHistorialCopia(int idHistorialCopia) {
-        this.idHistorialCopia = idHistorialCopia;
-    }
-
-    public int getIdReparto() {
-        return idReparto;
-    }
-
-    public void setIdReparto(int idReparto) {
-        this.idReparto = idReparto;
-    }
-
-    public int getIdCopia() {
-        return idCopia;
-    }
-
-    public void setIdCopia(int idCopia) {
-        this.idCopia = idCopia;
-    }
-
-    public int getIdPlantilla() {
-        return idPlantilla;
-    }
-
-    public void setIdPlantilla(int idPlantilla) {
-        this.idPlantilla = idPlantilla;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public OffsetDateTime getFechaArchivado() {
-        return fechaArchivado;
-    }
-
-    public void setFechaArchivado(OffsetDateTime fechaArchivado) {
-        this.fechaArchivado = fechaArchivado;
-    }
-
-    public int getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(int createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public OffsetDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(OffsetDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public int getModifiedBy() {
-        return modifiedBy;
-    }
-
-    public void setModifiedBy(int modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    public OffsetDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(OffsetDateTime modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
 }
