@@ -1,29 +1,47 @@
-// ========== Clase CuentaProyecto ==========
 package pe.edu.universidad.investigodominio.dominio;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import java.util.Date;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.ZonedDateTime;
 
 @Entity
+@Table(name = "cuenta_proyecto")
 public class CuentaProyecto {
-    
-    @Id
-    private int id;
-    
-    private String email;
-    private Integer id_proyecto;
-    private String estado;
-    private Integer created_by;
-    private Date created_date;
-    private Integer modified_by;
-    private Date modified_date;
 
-    public int getId() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "id_proyecto")
+    private Integer idProyecto;  // CamelCase (era id_proyecto)
+
+    @Column(name = "estado")
+    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+
+    @Column(name = "created_by")
+    private Integer createdBy;  // CamelCase
+
+    @CreationTimestamp
+    @Column(name = "created_date", updatable = false)
+    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
+
+    @Column(name = "modified_by")
+    private Integer modifiedBy;  // CamelCase
+
+    @UpdateTimestamp
+    @Column(name = "modified_date")
+    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
+
+    // Getters y Setters
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -35,51 +53,51 @@ public class CuentaProyecto {
         this.email = email;
     }
 
-    public Integer getId_proyecto() {
-        return id_proyecto;
+    public Integer getIdProyecto() {
+        return idProyecto;
     }
 
-    public void setId_proyecto(Integer id_proyecto) {
-        this.id_proyecto = id_proyecto;
+    public void setIdProyecto(Integer idProyecto) {
+        this.idProyecto = idProyecto;
     }
 
-    public String getEstado() {
+    public Boolean getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(Boolean estado) {
         this.estado = estado;
     }
 
-    public Integer getCreated_by() {
-        return created_by;
+    public Integer getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreated_by(Integer created_by) {
-        this.created_by = created_by;
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Date getCreated_date() {
-        return created_date;
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated_date(Date created_date) {
-        this.created_date = created_date;
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public Integer getModified_by() {
-        return modified_by;
+    public Integer getModifiedBy() {
+        return modifiedBy;
     }
 
-    public void setModified_by(Integer modified_by) {
-        this.modified_by = modified_by;
+    public void setModifiedBy(Integer modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 
-    public Date getModified_date() {
-        return modified_date;
+    public ZonedDateTime getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setModified_date(Date modified_date) {
-        this.modified_date = modified_date;
+    public void setModifiedDate(ZonedDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

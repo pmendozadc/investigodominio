@@ -1,29 +1,50 @@
 package pe.edu.universidad.investigodominio.dominio;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import java.util.Date;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.ZonedDateTime;
 
 @Entity
+@Table(name = "grupo")
 public class Grupo {
 
     @Id
-    private int id;
-    
-    private String nombre;
-    private Date fecha_creacion;
-    private String estado;
-    private Integer id_carpeta;
-    private Integer created_by;
-    private Date created_date;
-    private Integer modified_by;
-    private Date modified_date;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    public int getId() {
+    @Column(name = "nombre")
+    private String nombre;
+
+    @Column(name = "fecha_creacion")
+    private ZonedDateTime fechaCreacion;  // CamelCase + ZonedDateTime
+
+    @Column(name = "estado")
+    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+
+    @Column(name = "id_carpeta")
+    private Integer idCarpeta;  // CamelCase (era id_carpeta)
+
+    @Column(name = "created_by")
+    private Integer createdBy;  // CamelCase
+
+    @CreationTimestamp
+    @Column(name = "created_date", updatable = false)
+    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
+
+    @Column(name = "modified_by")
+    private Integer modifiedBy;  // CamelCase
+
+    @UpdateTimestamp
+    @Column(name = "modified_date")
+    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
+
+    // Getters y Setters
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -35,59 +56,59 @@ public class Grupo {
         this.nombre = nombre;
     }
 
-    public Date getFecha_creacion() {
-        return fecha_creacion;
+    public ZonedDateTime getFechaCreacion() {
+        return fechaCreacion;
     }
 
-    public void setFecha_creacion(Date fecha_creacion) {
-        this.fecha_creacion = fecha_creacion;
+    public void setFechaCreacion(ZonedDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
-    public String getEstado() {
+    public Boolean getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(Boolean estado) {
         this.estado = estado;
     }
 
-    public Integer getId_carpeta() {
-        return id_carpeta;
+    public Integer getIdCarpeta() {
+        return idCarpeta;
     }
 
-    public void setId_carpeta(Integer id_carpeta) {
-        this.id_carpeta = id_carpeta;
+    public void setIdCarpeta(Integer idCarpeta) {
+        this.idCarpeta = idCarpeta;
     }
 
-    public Integer getCreated_by() {
-        return created_by;
+    public Integer getCreatedBy() {
+        return createdBy;
     }
 
-    public void setCreated_by(Integer created_by) {
-        this.created_by = created_by;
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Date getCreated_date() {
-        return created_date;
+    public ZonedDateTime getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreated_date(Date created_date) {
-        this.created_date = created_date;
+    public void setCreatedDate(ZonedDateTime createdDate) {
+        this.createdDate = createdDate;
     }
 
-    public Integer getModified_by() {
-        return modified_by;
+    public Integer getModifiedBy() {
+        return modifiedBy;
     }
 
-    public void setModified_by(Integer modified_by) {
-        this.modified_by = modified_by;
+    public void setModifiedBy(Integer modifiedBy) {
+        this.modifiedBy = modifiedBy;
     }
 
-    public Date getModified_date() {
-        return modified_date;
+    public ZonedDateTime getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setModified_date(Date modified_date) {
-        this.modified_date = modified_date;
+    public void setModifiedDate(ZonedDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }
