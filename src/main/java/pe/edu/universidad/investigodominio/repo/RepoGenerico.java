@@ -39,7 +39,7 @@ public class RepoGenerico {
     	T entity = entityManager.find(entityClass, id);
     	if (entity != null) {
     		UtilClases.copiarData(entity, map);
-    		entityManager.persist(entity);
+    		entityManager.persist(entity); //Josshua: FIXME: Sugiero un cambio, .persist() solo se debe usar para guardar una nueva entidad, para realizar actualizaciones se recomienda usar .merge()
     	}
 		return Optional.ofNullable(entity);
 	}
