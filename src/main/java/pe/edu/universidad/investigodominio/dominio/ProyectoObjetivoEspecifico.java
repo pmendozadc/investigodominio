@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Data
@@ -20,7 +21,7 @@ public class ProyectoObjetivoEspecifico {
     @Column(name = "objetivo_especifico")
     private String objetivoEspecifico;
     @Column(name = "estado")
-    private String estado;
+    private Boolean estado;
 
     // Foreign keys
     @Column(name = "id_proyecto")
@@ -29,11 +30,11 @@ public class ProyectoObjetivoEspecifico {
     @Column(name = "created_by")
     private Integer createdBy;
     @Column(name = "created_date")
-    private Date createdDate;
+    private OffsetDateTime createdDate;
     @Column(name = "modified_by")
     private Integer modifiedBy;
     @Column(name = "modified_date")
-    private Date modifiedDate;
+    private OffsetDateTime modifiedDate;
 
     public ProyectoObjetivoEspecifico() {
 

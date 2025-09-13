@@ -33,7 +33,7 @@ public class Proyecto {
 	@Column(name = "fecha_fin")
 	private OffsetDateTime fechaFin;
 	@Column(name = "estado")
-	private String estado;
+	private Boolean estado;
 
 	@Column(name = "id_tipo_proyecto")
 	private Integer tipoProyecto;
@@ -60,7 +60,7 @@ public class Proyecto {
 	public Proyecto(
 			String nombre,
 			String objetivoGeneral,
-			Date fechaCreacion,
+			OffsetDateTime fechaCreacion,
 			Integer tipoProyecto
 	) {
 		this.nombre = nombre;
