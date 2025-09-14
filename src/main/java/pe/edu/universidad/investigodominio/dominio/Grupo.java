@@ -17,7 +17,7 @@ public class Grupo {
     private String nombre;
 
     @Column(name = "estado")
-    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+    private Boolean estado = true;  // Ahora es Boolean (ya convertimos en BD)
 
     @Column(name = "id_carpeta")
     private Integer idCarpeta;  // CamelCase (era id_carpeta)
