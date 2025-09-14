@@ -3,10 +3,6 @@ package pe.edu.universidad.investigodominio.dominio;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 public class Usuario {
 
@@ -26,24 +22,20 @@ public class Usuario {
 
     private boolean estado = true;
 
+    @Column(insertable = false, updatable = false)
     private OffsetDateTime createdDate;
 
-    @ManyToOne
     @JoinColumn(name = "created_by")
-    @JsonIgnore
-    private Usuario createdBy;
+    private Integer createdBy;
 
+    @Column(insertable = false, updatable = false)
     private OffsetDateTime modifiedDate;
 
-    @ManyToOne
     @JoinColumn(name = "modified_by")
-    @JsonIgnore
-    private Usuario modifiedBy;
+    private Integer modifiedBy;
 
-    @ManyToOne
-    @JoinColumn(name = "rol_id", nullable = false)
-    @JsonIgnore
-    private Rol rol;
+    @JoinColumn(name = "rol_id")
+    private Integer rolId;
 
     // Getters y setters
     public int getId() { return id; }
@@ -67,25 +59,15 @@ public class Usuario {
     public OffsetDateTime getCreatedDate() { return createdDate; }
     public void setCreatedDate(OffsetDateTime createdDate) { this.createdDate = createdDate; }
 
-    public Usuario getCreatedBy() { return createdBy; }
-    public void setCreatedBy(Usuario createdBy) { this.createdBy = createdBy; }
+    public Integer getCreatedBy() { return createdBy; }
+    public void setCreatedBy(Integer createdBy) { this.createdBy = createdBy; }
 
     public OffsetDateTime getModifiedDate() { return modifiedDate; }
     public void setModifiedDate(OffsetDateTime modifiedDate) { this.modifiedDate = modifiedDate; }
 
-    public Usuario getModifiedBy() { return modifiedBy; }
-    public void setModifiedBy(Usuario modifiedBy) { this.modifiedBy = modifiedBy; }
+    public Integer getModifiedBy() { return modifiedBy; }
+    public void setModifiedBy(Integer modifiedBy) { this.modifiedBy = modifiedBy; }
 
-    public Rol getRol() { return rol; }
-    public void setRol(Rol rol) { this.rol = rol; }
-    
-    @JsonProperty("createdBy")
-    public Integer getCreatedById() {
-        return createdBy != null ? createdBy.getId() : null;
-    }
-
-    @JsonProperty("rolId")
-    public Integer getRolId() {
-        return rol != null ? rol.getId() : null;
-    }
+    public Integer getRolId() { return rolId; }
+    public void setRolId(Integer rolId) { this.rolId = rolId; }
 }
