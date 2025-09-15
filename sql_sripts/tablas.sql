@@ -25,9 +25,9 @@ CREATE TABLE proyecto(
     email_lider             VARCHAR(200),
     id_carpeta              VARCHAR(200),
     objetivo_general        VARCHAR(500),
-    fecha_creacion          TIMESTAMPTZ,
-    fecha_inicio            TIMESTAMPTZ,
-    fecha_fin               TIMESTAMPTZ,
+    fecha_creacion          TIMESTAMP WITH TIME ZONE,
+    fecha_inicio            TIMESTAMP WITH TIME ZONE,
+    fecha_fin               TIMESTAMP WITH TIME ZONE,
     estado                  BOOLEAN DEFAULT TRUE,
 
     id_tipo_proyecto        INTEGER,
@@ -36,9 +36,9 @@ CREATE TABLE proyecto(
     id_estado_proyecto      INTEGER,
 
     created_by              INTEGER,
-    created_date            TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_date            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     modified_by             INTEGER,
-    modified_date           TIMESTAMPTZ
+    modified_date           TIMESTAMP WITH TIME ZONE
 );
 
 DROP SEQUENCE IF EXISTS secuencia_proyecto;
@@ -62,9 +62,9 @@ CREATE TABLE tipo_proyecto(
     estado                  BOOLEAN DEFAULT TRUE,
 
     created_by              INTEGER,
-    created_date            TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_date            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     modified_by             INTEGER,
-    modified_date           TIMESTAMPTZ
+    modified_date           TIMESTAMP WITH TIME ZONE
 );
 
 DROP SEQUENCE IF EXISTS secuencia_tipo_proyecto;
@@ -90,9 +90,9 @@ CREATE TABLE proyecto_objetivo_especifico(
     id_proyecto             INTEGER,
 
     created_by              INTEGER,
-    created_date            TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_date            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     modified_by             INTEGER,
-    modified_date           TIMESTAMPTZ
+    modified_date           TIMESTAMP WITH TIME ZONE
 );
 
 DROP SEQUENCE IF EXISTS secuencia_proyecto_objetivo_especifico;
@@ -119,9 +119,9 @@ CREATE TABLE documento_proyecto(
     id_proyecto             INTEGER,
 
     created_by              INTEGER,
-    created_date            TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    created_date            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     modified_by             INTEGER,
-    modified_date           TIMESTAMPTZ
+    modified_date           TIMESTAMP WITH TIME ZONE
 );
 
 DROP SEQUENCE IF EXISTS secuencia_documento_proyecto;
