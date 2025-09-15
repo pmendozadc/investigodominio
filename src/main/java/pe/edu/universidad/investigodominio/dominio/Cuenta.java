@@ -34,7 +34,7 @@ public class Cuenta {
     private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime para TIMESTAMPTZ
 
     @Column(name = "estado")
-    private Boolean estado;  // Columna para borrado lógico (DEFAULT true en BD)
+    private Boolean estado = true;  // Columna para borrado lógico (DEFAULT true en BD)
 
     // Getters y Setters
     public Integer getId() {

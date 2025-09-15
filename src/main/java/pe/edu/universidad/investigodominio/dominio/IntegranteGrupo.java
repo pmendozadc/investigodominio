@@ -20,7 +20,7 @@ public class IntegranteGrupo {
     private String email;
 
     @Column(name = "estado")
-    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+    private Boolean estado = true;  // Ahora es Boolean (ya convertimos en BD)
 
     @Column(name = "created_by")
     private Integer createdBy;  // CamelCase
