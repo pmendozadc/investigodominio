@@ -37,4 +37,19 @@ public class ServiceGenerico {
 		Optional opt = repoGenerico.delete(entidadNombre, id);
 		return opt;
 	}
+	
+	public Optional deleteHard(String entidadNombre, int id) {
+		Optional opt = repoGenerico.deleteHard(entidadNombre, id);
+		return opt;
+	}
+	
+	public Optional activar(String entidadNombre, int id) {
+		Optional opt = repoGenerico.activar(entidadNombre, id);
+		return opt;
+	}
+	
+	public Optional inactivar(String entidadNombre, int id) {
+		Optional opt = repoGenerico.inactivar(entidadNombre, id);
+		return opt;
+	}
 }
