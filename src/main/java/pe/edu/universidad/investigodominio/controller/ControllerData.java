@@ -32,6 +32,11 @@ public class ControllerData {
 	@GetMapping("/r/{entidad}/{id}")
 	public ResponseEntity getEntidad(@PathVariable("entidad") String entidadNombre, @PathVariable("id") int id) {
 	    Optional entidadOpt = serviceGenerico.read(entidadNombre, id);
+	    if (entidadOpt.isEmpty()) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + id + " no fue encontrada.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
 	    return ResponseEntity.ok(entidadOpt.get());
 	}
 	
@@ -40,7 +45,7 @@ public class ControllerData {
 		Optional entidadOpt = serviceGenerico.update(entidadNombre, map);
 		if (entidadOpt.isEmpty()) {
 	        Map<String, String> response = new HashMap<>();
-	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + map.get("id") + " no fue encontrado.");
+	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + map.get("id") + " no fue encontrada.");
 	        return ResponseEntity.badRequest().body(response);
 	    }
 	    return ResponseEntity.ok(entidadOpt.get());
@@ -49,6 +54,44 @@ public class ControllerData {
 	@DeleteMapping("/d/{entidad}/{id}")
 	public ResponseEntity deleteEntidad(@PathVariable("entidad") String entidadNombre, @PathVariable("id") int id) {
 		Optional entidadOpt = serviceGenerico.delete(entidadNombre, id);
+		if (entidadOpt.isEmpty()) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + id + " no fue encontrada.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
+	    return ResponseEntity.ok(entidadOpt.get());
+	}
+	
+	@DeleteMapping("/dh/{entidad}/{id}")
+	public ResponseEntity deleteHardEntidad(@PathVariable("entidad") String entidadNombre, @PathVariable("id") int id) {
+		Optional entidadOpt = serviceGenerico.deleteHard(entidadNombre, id);
+		if (entidadOpt.isEmpty()) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + id + " no fue encontrada.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
+	    return ResponseEntity.ok(entidadOpt.get());
+	}
+	
+	@PutMapping("/a/{entidad}/{id}")
+	public ResponseEntity activarEntidad(@PathVariable("entidad") String entidadNombre, @PathVariable("id") int id) {
+		Optional entidadOpt = serviceGenerico.activar(entidadNombre, id);
+		if (entidadOpt.isEmpty()) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + id + " no fue encontrada.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
+	    return ResponseEntity.ok(entidadOpt.get());
+	}
+	
+	@PutMapping("/i/{entidad}/{id}")
+	public ResponseEntity inactivarEntidad(@PathVariable("entidad") String entidadNombre, @PathVariable("id") int id) {
+		Optional entidadOpt = serviceGenerico.inactivar(entidadNombre, id);
+		if (entidadOpt.isEmpty()) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "La entidad " + entidadNombre + " con ID " + id + " no fue encontrada.");
+	        return ResponseEntity.badRequest().body(response);
+	    }
 	    return ResponseEntity.ok(entidadOpt.get());
 	}
 }
