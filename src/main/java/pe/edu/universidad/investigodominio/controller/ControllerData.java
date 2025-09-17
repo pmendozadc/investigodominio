@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import pe.edu.universidad.investigodominio.dominio.Proyecto;
 import pe.edu.universidad.investigodominio.service.ServiceGenerico;
 
 @RestController
