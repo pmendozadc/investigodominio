@@ -32,6 +32,8 @@ public class RepoGenerico {
     public Object insert(String entidadNombre, Map<String, Object> map) {
     	Object obj = UtilClases.obtenerObjeto(strPackDominio+entidadNombre, map);
 		entityManager.persist(obj);
+		entityManager.flush();
+		entityManager.refresh(obj);
 		return obj;
 	}
     

@@ -29,7 +29,7 @@ public class TestControllerData {
 		mapProyecto.put("nombre", "Proyecto de ejemplo");
 		mapProyecto.put("emailLider", "lider@gmail.com");
         ResponseEntity<Map> response = restTemplate.postForEntity("/c/Proyecto", mapProyecto, Map.class);
-        System.out.println(response);
+        System.out.println("POST Response: "+response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         //Map<String, Object> map = response.getBody();
         
@@ -39,7 +39,7 @@ public class TestControllerData {
     @Order(2)
     void testGetProyecto() {
         ResponseEntity<Map> response = restTemplate.getForEntity("/r/Proyecto/1001", Map.class);
-        System.out.println(response);
+        System.out.println("GET Response: "+response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         //Map<String, Object> map = response.getBody();
         
