@@ -15,19 +15,19 @@ public class RelacionRepartoCopia {
 
     @Id
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     @Column(name = "email")
     private String email;
     @Column(name = "estado")
-    private boolean estado = true;
+    private Boolean estado = true;
 
     @Column(name = "created_by")
-    private int createdBy;
+    private Integer createdBy;
     @Column(name = "created_date", insertable = false, updatable = false)
     private OffsetDateTime createdDate;
     @Column(name = "modified_by")
-    private int modifiedBy;
+    private Integer modifiedBy;
     @Column(name = "modified_date", insertable = false, updatable = false)
     private OffsetDateTime modifiedDate;
 
