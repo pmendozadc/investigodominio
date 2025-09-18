@@ -2,6 +2,8 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import java.time.OffsetDateTime;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,6 +14,7 @@ import java.util.Date;
 @Data
 @Table(name = "proyecto")
 @Entity
+@DynamicInsert
 public class Proyecto {
 
 	@Id
@@ -68,6 +71,86 @@ public class Proyecto {
 		this.fechaCreacion = fechaCreacion;
 		this.tipoProyecto = tipoProyecto;
 	}
-	
-	
+
+	public OffsetDateTime getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(OffsetDateTime fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public Integer getIdTipoProyecto() {
+		return idTipoProyecto;
+	}
+
+	public Boolean getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Boolean estado) {
+		this.estado = estado;
+	}
+
+	public void setIdTipoProyecto(Integer idTipoProyecto) {
+		this.idTipoProyecto = idTipoProyecto;
+	}
+
+	public Integer getIdHojaSeguimiento() {
+		return idHojaSeguimiento;
+	}
+
+	public void setIdHojaSeguimiento(Integer idHojaSeguimiento) {
+		this.idHojaSeguimiento = idHojaSeguimiento;
+	}
+
+	public Integer getIdGrupoAsignado() {
+		return idGrupoAsignado;
+	}
+
+	public void setIdGrupoAsignado(Integer idGrupoAsignado) {
+		this.idGrupoAsignado = idGrupoAsignado;
+	}
+
+	public Integer getIdEstadoProyecto() {
+		return idEstadoProyecto;
+	}
+
+	public void setIdEstadoProyecto(Integer idEstadoProyecto) {
+		this.idEstadoProyecto = idEstadoProyecto;
+	}
+
+	public Integer getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Integer createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public OffsetDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(OffsetDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Integer getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(Integer modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public OffsetDateTime getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(OffsetDateTime modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+		
 }
