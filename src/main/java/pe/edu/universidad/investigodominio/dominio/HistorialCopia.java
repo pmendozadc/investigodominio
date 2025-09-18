@@ -5,12 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.OffsetDateTime;
 
 @Table(name = "historial_copia")
 @Entity
 @DynamicInsert
+@DynamicUpdate
 public class HistorialCopia {
 
     @Id
