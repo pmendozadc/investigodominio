@@ -1,9 +1,6 @@
 package pe.edu.universidad.investigodominio.dominio;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,6 +14,8 @@ public class Copia {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(generator = "copia_id_seq")
+    @SequenceGenerator(name = "copia_id_seq", sequenceName = "copia_id_seq", allocationSize = 1)
     private Integer id;
 
     @Column(name = "nombre")
