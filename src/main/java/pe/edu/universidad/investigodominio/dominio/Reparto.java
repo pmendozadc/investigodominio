@@ -6,17 +6,20 @@ import jakarta.persistence.Id;
 import java.time.OffsetDateTime;
 
 @Entity
+@DynamicInsert
 public class Reparto {
     @Id
+    @GeneratedValue(generator="reparto_id_seq")
+    @SequenceGenerator(name="reparto_id_seq",sequenceName="reparto_id_seq", allocationSize=1)
     private int id;
     private String idCarpetaReparto;
     private OffsetDateTime createdDate;
-    private String createdBy;
+    private int createdBy;
     private OffsetDateTime modifiedDate;
-    private String modifiedBy;
+    private int modifiedBy;
     private int idPlatilla;
-    private boolean activo;
-    private boolean estado;
+    private Boolean activo;
+    private Boolean estado;
 
     public int getId() {
         return id;
@@ -30,7 +33,7 @@ public class Reparto {
         return createdDate;
     }
 
-    public String getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 
@@ -38,7 +41,7 @@ public class Reparto {
         return modifiedDate;
     }
 
-    public String getModifiedBy() {
+    public int getModifiedBy() {
         return modifiedBy;
     }
 
@@ -46,11 +49,11 @@ public class Reparto {
         return idPlatilla;
     }
 
-    public boolean getActivo() {
+    public Boolean getActivo() {
         return activo;
     }
 
-    public boolean getEstado() {
+    public Boolean getEstado() {
         return estado;
     }
 
@@ -66,7 +69,7 @@ public class Reparto {
         this.createdDate = createdDate;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -74,7 +77,7 @@ public class Reparto {
         this.modifiedDate = modifiedDate;
     }
 
-    public void setModifiedBy(String modifiedBy) {
+    public void setModifiedBy(int modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
@@ -82,11 +85,11 @@ public class Reparto {
         this.idPlatilla = idPlatilla;
     }
 
-    public void setActivo(boolean activo) {
+    public void setActivo(Boolean activo) {
         this.activo = activo;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(Boolean estado) {
         this.estado = estado;
     }
 }

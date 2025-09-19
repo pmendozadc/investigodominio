@@ -6,17 +6,20 @@ import jakarta.persistence.Id;
 import java.time.OffsetDateTime;
 
 @Entity
+@DynamicInsert
 public class Informe {
     @Id
+    @GeneratedValue(generator="informe_id_seq")
+    @SequenceGenerator(name="informe_id_seq",sequenceName="informe_id_seq", allocationSize=1)
     private int id;
     private String nombre;
     private String idDocumento;
     private String idImagen;
     private OffsetDateTime createdDate;
-    private String createdBy;
+    private int createdBy;
     private OffsetDateTime modifiedDate;
-    private String modifiedBy;
-    private boolean estado;
+    private int modifiedBy;
+    private Boolean estado;
 
     public int getId() {
         return id;
@@ -38,7 +41,7 @@ public class Informe {
         return createdDate;
     }
 
-    public String getCreatedBy() {
+    public int getCreatedBy() {
         return createdBy;
     }
 
@@ -46,11 +49,11 @@ public class Informe {
         return modifiedDate;
     }
 
-    public String getModifiedBy() {
+    public int getModifiedBy() {
         return modifiedBy;
     }
 
-    public boolean getEstado() {
+    public Boolean getEstado() {
         return estado;
     }
 
@@ -74,7 +77,7 @@ public class Informe {
         this.createdDate = createdDate;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(int createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -82,11 +85,11 @@ public class Informe {
         this.modifiedDate = modifiedDate;
     }
 
-    public void setModifiedBy(String modifiedBy) {
+    public void setModifiedBy(int modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(Boolean estado) {
         this.estado = estado;
     }
 }
