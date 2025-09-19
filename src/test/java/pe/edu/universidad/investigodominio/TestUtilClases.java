@@ -2,6 +2,7 @@ package pe.edu.universidad.investigodominio;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,5 +72,20 @@ public class TestUtilClases {
 		} catch (Exception e) {
 			assertEquals(NoSuchFieldException.class, e.getCause().getClass());
 		}
+	}
+	
+	@Test
+	public void testObtenerDato() {
+		Proyecto p = new Proyecto("ejemplo","Probar",null,1);
+		Object valor = UtilClases.obtenerDato(p, "idTipoProyecto");
+		assertEquals(1, valor);
+	}
+	
+	@Test
+	public void testEstablecerDato() {
+		Proyecto p = new Proyecto();
+		UtilClases.establecerDato(p, "idTipoProyecto", 3);
+		Object valor = UtilClases.obtenerDato(p, "idTipoProyecto");
+		assertEquals(3, valor);
 	}
 }

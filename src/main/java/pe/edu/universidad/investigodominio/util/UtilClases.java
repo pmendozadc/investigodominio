@@ -66,6 +66,41 @@ public class UtilClases {
 		return obj;
 	}
 	
+	public static Object establecerDato(Object obj, String campo, Object valor) {
+		try {
+			Field field = obj.getClass().getDeclaredField(campo);
+			field.setAccessible(true);  // permitir acceso si es privado
+			field.set(obj, valor);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		}
+		return obj;
+	}
+	
+	public static Object obtenerDato(Object obj, String campo) {
+		Object valor = null;
+		try {
+			Field field = obj.getClass().getDeclaredField(campo);
+			field.setAccessible(true);  // permitir acceso si es privado
+			valor = field.get(obj);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchFieldException e) {
+			throw new RuntimeException(e);
+		}
+		return valor;
+	}
+	
 	public static Class obtenerClase(String nombreCompleto) {
 		Class aclass = null;
 		try {
