@@ -1,35 +1,39 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicInsert;
 import java.time.OffsetDateTime;
 
-
 @Entity
+@DynamicInsert
 public class Rol {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="rol_id_seq")
+    @SequenceGenerator(name="rol_id_seq",sequenceName="rol_id_seq", allocationSize=1)
 	private int id;
 	
 	private String nombre;
-
-	private boolean estado = true;
-
-    @Column(insertable = false, updatable = false)
+	private Boolean estado;
     private OffsetDateTime createdDate;
-
-    @JoinColumn(name = "created_by")
     private Integer createdBy;
-
-    @Column(insertable = false, updatable = false)
     private OffsetDateTime modifiedDate;
-
-    @JoinColumn(name = "modified_by")
     private Integer modifiedBy;
-	
-	public int getId() {
+
+    public Rol() {}
+
+    public Rol(int id, String nombre, Boolean estado, OffsetDateTime createdDate, OffsetDateTime modifiedDate, Integer createdBy, Integer modifiedBy) {
+        this.id = id;
+        this.nombre = nombre;
+        this.estado = estado;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
+        this.createdBy = createdBy;
+        this.modifiedBy = modifiedBy;
+    }
+
+    public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id; 
 	}
@@ -37,13 +41,12 @@ public class Rol {
 	public String getNombre() {
 		return nombre;
 	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
-	public boolean getEstado() { return estado; }
-    public void setEstado(boolean estado) { this.estado = estado; }
+	public Boolean getEstado() { return estado; }
+    public void setEstado(Boolean estado) { this.estado = estado; }
 
     public OffsetDateTime getCreatedDate() { return createdDate; }
     public void setCreatedDate(OffsetDateTime createdDate) { this.createdDate = createdDate; }
@@ -56,5 +59,4 @@ public class Rol {
 
     public Integer getModifiedBy() { return modifiedBy; }
     public void setModifiedBy(Integer modifiedBy) { this.modifiedBy = modifiedBy; }
-
 }

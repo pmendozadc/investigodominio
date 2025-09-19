@@ -1,41 +1,44 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicInsert;
 import java.time.OffsetDateTime;
 
 @Entity
+@DynamicInsert
 public class Usuario {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="usuario_id_seq")
+    @SequenceGenerator(name="usuario_id_seq",sequenceName="usuario_id_seq", allocationSize=1)
     private int id;
 
     private String nombre;
-
     private String apellido;
-
-    @Column(unique = true, nullable = false)
     private String dni;
-
-    @Column(unique = true, nullable = false)
     private String email;
-
-    private boolean estado = true;
-
-    @Column(insertable = false, updatable = false)
+    private Boolean estado;
     private OffsetDateTime createdDate;
-
-    @JoinColumn(name = "created_by")
     private Integer createdBy;
-
-    @Column(insertable = false, updatable = false)
     private OffsetDateTime modifiedDate;
-
-    @JoinColumn(name = "modified_by")
     private Integer modifiedBy;
-
-    @JoinColumn(name = "rol_id")
     private Integer rolId;
+
+    public Usuario(int id, String nombre, String apellido, String dni, Boolean estado, String email, OffsetDateTime createdDate, Integer createdBy, OffsetDateTime modifiedDate, Integer modifiedBy, Integer rolId) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.estado = estado;
+        this.email = email;
+        this.createdDate = createdDate;
+        this.createdBy = createdBy;
+        this.modifiedDate = modifiedDate;
+        this.modifiedBy = modifiedBy;
+        this.rolId = rolId;
+    }
+
+    public Usuario() {}
 
     // Getters y setters
     public int getId() { return id; }
@@ -53,8 +56,8 @@ public class Usuario {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public boolean getEstado() { return estado; }
-    public void setEstado(boolean estado) { this.estado = estado; }
+    public Boolean getEstado() { return estado; }
+    public void setEstado(Boolean estado) { this.estado = estado; }
 
     public OffsetDateTime getCreatedDate() { return createdDate; }
     public void setCreatedDate(OffsetDateTime createdDate) { this.createdDate = createdDate; }
