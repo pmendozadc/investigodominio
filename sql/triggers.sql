@@ -6,17 +6,34 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--INSERT
+CREATE OR REPLACE TRIGGER trg_copia_insert
+BEFORE INSERT ON copia
+FOR EACH ROW
+EXECUTE FUNCTION establecer_created_date();
+
+CREATE OR REPLACE TRIGGER trg_historial_copia_insert
+BEFORE INSERT ON historial_copia
+FOR EACH ROW
+EXECUTE FUNCTION establecer_created_date();
+
+CREATE OR REPLACE TRIGGER trg_relacion_reparto_copia_insert
+BEFORE INSERT ON relacion_reparto_copia
+FOR EACH ROW
+EXECUTE FUNCTION establecer_created_date();
+
+--UPDATE
 CREATE OR REPLACE TRIGGER trg_copia_update
-BEFORE INSERT OR UPDATE ON copia
+BEFORE UPDATE ON copia
 FOR EACH ROW
 EXECUTE FUNCTION establecer_modified_date();
 
 CREATE OR REPLACE TRIGGER trg_historial_copia_update
-BEFORE INSERT OR UPDATE ON historial_copia
+BEFORE UPDATE ON historial_copia
 FOR EACH ROW
 EXECUTE FUNCTION establecer_modified_date();
 
 CREATE OR REPLACE TRIGGER trg_relacion_reparto_copia_update
-BEFORE INSERT OR UPDATE ON relacion_reparto_copia
+BEFORE UPDATE ON relacion_reparto_copia
 FOR EACH ROW
 EXECUTE FUNCTION establecer_modified_date();
