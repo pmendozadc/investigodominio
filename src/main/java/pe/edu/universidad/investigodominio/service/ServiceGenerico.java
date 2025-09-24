@@ -52,4 +52,9 @@ public class ServiceGenerico {
 		Optional opt = repoGenerico.inactivar(entidadNombre, id);
 		return opt;
 	}
+	
+	public Optional consultarNativa(String sql) {
+		Optional opt = repoGenerico.consultarNativa(sql);
+		return opt;
+	}
 }

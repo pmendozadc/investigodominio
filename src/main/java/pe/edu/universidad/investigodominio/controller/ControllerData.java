@@ -21,6 +21,7 @@ import pe.edu.universidad.investigodominio.service.ServiceGenerico;
 public class ControllerData {
 
 	
+	private static final String strSql = "sql";
 	@Autowired
 	private ServiceGenerico serviceGenerico;
 	
@@ -94,5 +95,16 @@ public class ControllerData {
 	        return ResponseEntity.badRequest().body(response);
 	    }
 	    return ResponseEntity.ok(entidadOpt.get());
+	}
+	@PostMapping("/n")
+	public ResponseEntity consultarSQLNativo(@RequestBody Map<String, Object> map) {
+		String sql = (String) map.get(strSql);
+		if (sql == null) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "No fue encontrado el campo sql");
+	        return ResponseEntity.badRequest().body(response);
+	    }
+	    Optional resultados = serviceGenerico.consultarNativa(sql);
+		return ResponseEntity.ok(resultados.get());
 	}
 }

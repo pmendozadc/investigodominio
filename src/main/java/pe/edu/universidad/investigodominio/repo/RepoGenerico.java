@@ -1,6 +1,7 @@
 package pe.edu.universidad.investigodominio.repo;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import pe.edu.universidad.investigodominio.util.UtilClases;
 
@@ -91,4 +93,9 @@ public class RepoGenerico {
     	}
 		return Optional.ofNullable(entity);
 	}
+    
+    public <T, ID extends Serializable> Optional<T> consultarNativa(String sql) {
+        Query query = entityManager.createNativeQuery(sql);
+        return Optional.ofNullable(query.getResultList()); // Devuelve lista de Object[]
+    }
 }
