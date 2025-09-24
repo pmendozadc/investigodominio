@@ -1,23 +1,22 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import java.time.OffsetDateTime;
-
 import org.hibernate.annotations.DynamicInsert;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.ToString;
 
-import java.util.Date;
-
-@Data
 @Table(name = "proyecto")
 @Entity
 @DynamicInsert
 public class Proyecto {
 
 	@Id
+	@GeneratedValue(generator = "proyecto_id_seq")
+	@SequenceGenerator(
+			name = "proyecto_id_seq",
+			sequenceName = "proyecto_id_seq",
+			allocationSize = 1
+	)
 	@Column(name = "id")
 	private int id;
 
@@ -39,7 +38,7 @@ public class Proyecto {
 	private Boolean estado;
 
 	@Column(name = "id_tipo_proyecto")
-	private Integer tipoProyecto;
+	private Integer idTipoProyecto;
 	@Column(name = "id_hoja_seguimiento")
 	private Integer idHojaSeguimiento;
 	@Column(name = "id_grupo_asignado")
@@ -69,7 +68,7 @@ public class Proyecto {
 		this.nombre = nombre;
 		this.objetivoGeneral = objetivoGeneral;
 		this.fechaCreacion = fechaCreacion;
-		this.tipoProyecto = tipoProyecto;
+		this.idTipoProyecto = tipoProyecto;
 	}
 
 	public OffsetDateTime getFechaFin() {
@@ -78,6 +77,62 @@ public class Proyecto {
 
 	public void setFechaFin(OffsetDateTime fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getEmailLider() {
+		return emailLider;
+	}
+
+	public void setEmailLider(String emailLider) {
+		this.emailLider = emailLider;
+	}
+
+	public String getIdCarpeta() {
+		return idCarpeta;
+	}
+
+	public void setIdCarpeta(String idCarpeta) {
+		this.idCarpeta = idCarpeta;
+	}
+
+	public String getObjetivoGeneral() {
+		return objetivoGeneral;
+	}
+
+	public void setObjetivoGeneral(String objetivoGeneral) {
+		this.objetivoGeneral = objetivoGeneral;
+	}
+
+	public OffsetDateTime getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(OffsetDateTime fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public OffsetDateTime getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(OffsetDateTime fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
 
 	public Integer getIdTipoProyecto() {
@@ -152,5 +207,4 @@ public class Proyecto {
 		this.modifiedDate = modifiedDate;
 	}
 
-		
 }

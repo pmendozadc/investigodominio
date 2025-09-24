@@ -1,7 +1,9 @@
+-- Tablas de la base de datos
 SELECT tablename
 FROM pg_catalog.pg_tables
 WHERE schemaname = 'public';
 
+-- Detalles de la tabla
 SELECT
     column_name,
     data_type,
@@ -11,7 +13,37 @@ SELECT
 FROM
     information_schema.columns
 WHERE
-    table_name = 'proyecto';
+    table_name = 'rol';
+
+-- Foreing keys and tables
+SELECT
+    c.conname AS constraint_name,
+    tbl.relname AS referencing_table,
+    col.attname AS referencing_column,
+    referenced_tbl.relname AS referenced_table,
+    referenced_col.attname AS referenced_column
+FROM
+    pg_constraint c
+    JOIN pg_namespace nsp ON nsp.oid = c.connamespace
+    JOIN pg_class tbl ON tbl.oid = c.conrelid
+    JOIN pg_attribute col ON col.attrelid = c.conrelid AND col.attnum = ANY(c.conkey)
+    JOIN pg_class referenced_tbl ON referenced_tbl.oid = c.confrelid
+    JOIN pg_attribute referenced_col ON referenced_col.attrelid = c.confrelid AND referenced_col.attnum = ANY(c.confkey)
+WHERE
+    c.contype = 'f' AND
+    nsp.nspname = 'public'
+ORDER BY
+    tbl.relname, c.conname;
+
+-- Usuarios activos y no activos
+SELECT
+  SUM(CASE WHEN state = 'active' THEN 1 ELSE 0 END) AS activas,
+  SUM(CASE WHEN state LIKE 'idle%' THEN 1 ELSE 0 END) AS idle
+FROM pg_stat_activity
+WHERE backend_type = 'client backend';
+
+
+
 
 DROP TABLE IF EXISTS proyecto;
 DROP TABLE IF EXISTS tipo_proyecto;
@@ -41,19 +73,19 @@ CREATE TABLE proyecto(
     modified_date           TIMESTAMP WITH TIME ZONE
 );
 
-DROP SEQUENCE IF EXISTS secuencia_proyecto;
+DROP SEQUENCE IF EXISTS proyecto_id_seq;
 
-CREATE SEQUENCE secuencia_proyecto
-    START WITH 101
+CREATE SEQUENCE proyecto_id_seq
+    START WITH 1001
     INCREMENT BY 1
-    MINVALUE 101
+    MINVALUE 1001
     MAXVALUE 999999;
 
 ALTER TABLE
     proyecto
 ALTER
     COLUMN id
-    SET DEFAULT nextval('secuencia_proyecto');
+    SET DEFAULT nextval('proyecto_id_seq');
 
 -- ------- Tabla tipo_proyecto -----------------------------
 CREATE TABLE tipo_proyecto(
@@ -67,19 +99,19 @@ CREATE TABLE tipo_proyecto(
     modified_date           TIMESTAMP WITH TIME ZONE
 );
 
-DROP SEQUENCE IF EXISTS secuencia_tipo_proyecto;
+DROP SEQUENCE IF EXISTS tipo_proyecto_id_seq;
 
-CREATE SEQUENCE secuencia_tipo_proyecto
-    START WITH 101
+CREATE SEQUENCE tipo_proyecto_id_seq
+    START WITH 1001
     INCREMENT BY 1
-    MINVALUE 101
+    MINVALUE 1001
     MAXVALUE 999999;
 
 ALTER TABLE
     tipo_proyecto
 ALTER
     COLUMN id
-    SET DEFAULT nextval('secuencia_tipo_proyecto');
+    SET DEFAULT nextval('tipo_proyecto_id_seq');
 
 -- ------- Tabla proyecto_objetivo_especifico --------------
 CREATE TABLE proyecto_objetivo_especifico(
@@ -95,19 +127,19 @@ CREATE TABLE proyecto_objetivo_especifico(
     modified_date           TIMESTAMP WITH TIME ZONE
 );
 
-DROP SEQUENCE IF EXISTS secuencia_proyecto_objetivo_especifico;
+DROP SEQUENCE IF EXISTS proyecto_objetivo_especifico_id_seq;
 
-CREATE SEQUENCE secuencia_proyecto_objetivo_especifico
-    START WITH 101
+CREATE SEQUENCE proyecto_objetivo_especifico_id_seq
+    START WITH 1001
     INCREMENT BY 1
-    MINVALUE 101
+    MINVALUE 1001
     MAXVALUE 999999;
 
 ALTER TABLE
     proyecto_objetivo_especifico
 ALTER
     COLUMN id
-    SET DEFAULT nextval('secuencia_proyecto_objetivo_especifico');
+    SET DEFAULT nextval('proyecto_objetivo_especifico_id_seq');
 
 -- ------- Tabla documento_proyecto ------------------------
 CREATE TABLE documento_proyecto(
@@ -124,25 +156,25 @@ CREATE TABLE documento_proyecto(
     modified_date           TIMESTAMP WITH TIME ZONE
 );
 
-DROP SEQUENCE IF EXISTS secuencia_documento_proyecto;
+DROP SEQUENCE IF EXISTS documento_proyecto_id_seq;
 
-CREATE SEQUENCE secuencia_documento_proyecto
-    START WITH 101
+CREATE SEQUENCE documento_proyecto_id_seq
+    START WITH 1001
     INCREMENT BY 1
-    MINVALUE 101
+    MINVALUE 1001
     MAXVALUE 999999;
 
 ALTER TABLE
     documento_proyecto
 ALTER
     COLUMN id
-    SET DEFAULT nextval('secuencia_documento_proyecto');
+    SET DEFAULT nextval('documento_proyecto_id_seq');
 
 -- ---------- Funciones para los triggers ----------------
 
 CREATE OR REPLACE FUNCTION actualizar_modified_date()
 RETURNS TRIGGER AS
-    $$
+$$
 BEGIN
     RAISE NOTICE 'Trigger activado: actualizar_modified_date';
     NEW.modified_date = (CURRENT_TIMESTAMP AT TIME ZONE 'America/Lima')::timestamptz;
@@ -151,30 +183,61 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- ----------- Triggers ----------------------------------
-DROP TRIGGER IF EXISTS trigger_actualizar_proyecto ON proyecto;
 
-CREATE TRIGGER trigger_actualizar_proyecto
-BEFORE UPDATE ON proyecto
+DROP TRIGGER IF EXISTS trigger_create_proyecto ON proyecto;
+
+CREATE TRIGGER trigger_create_proyecto
+BEFORE INSERT ON proyecto
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
 
-DROP TRIGGER IF EXISTS trigger_actualizar_tipo_proyecto ON tipo_proyecto;
+DROP TRIGGER IF EXISTS trigger_update_tipo_proyecto ON tipo_proyecto;
 
-CREATE TRIGGER trigger_actualizar_tipo_proyecto
+CREATE TRIGGER trigger_update_tipo_proyecto
 BEFORE UPDATE ON tipo_proyecto
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
 
-DROP TRIGGER IF EXISTS trigger_actualizar_proyecto_objetivo_especifico ON proyecto_objetivo_especifico;
+DROP TRIGGER IF EXISTS trigger_update_proyecto_objetivo_especifico ON proyecto_objetivo_especifico;
 
-CREATE TRIGGER trigger_actualizar_proyecto_objetivo_especifico
+CREATE TRIGGER trigger_update_proyecto_objetivo_especifico
 BEFORE UPDATE ON proyecto_objetivo_especifico
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
 
-DROP TRIGGER IF EXISTS trigger_actualizar_documento_proyecto ON documento_proyecto;
+DROP TRIGGER IF EXISTS trigger_update_documento_proyecto
+ON documento_proyecto;
 
-CREATE TRIGGER trigger_actualizar_documento_proyecto
+CREATE TRIGGER trigger_update_documento_proyecto
+BEFORE UPDATE ON documento_proyecto
+FOR EACH ROW
+EXECUTE FUNCTION actualizar_modified_date();
+
+
+DROP TRIGGER IF EXISTS trigger_update_proyecto ON proyecto;
+
+CREATE TRIGGER trigger_update_proyecto
+BEFORE UPDATE ON proyecto
+FOR EACH ROW
+EXECUTE FUNCTION actualizar_modified_date();
+
+DROP TRIGGER IF EXISTS trigger_update_tipo_proyecto ON tipo_proyecto;
+
+CREATE TRIGGER trigger_update_tipo_proyecto
+BEFORE UPDATE ON tipo_proyecto
+FOR EACH ROW
+EXECUTE FUNCTION actualizar_modified_date();
+
+DROP TRIGGER IF EXISTS trigger_update_proyecto_objetivo_especifico ON proyecto_objetivo_especifico;
+
+CREATE TRIGGER trigger_update_proyecto_objetivo_especifico
+BEFORE UPDATE ON proyecto_objetivo_especifico
+FOR EACH ROW
+EXECUTE FUNCTION actualizar_modified_date();
+
+DROP TRIGGER IF EXISTS trigger_update_documento_proyecto ON documento_proyecto;
+
+CREATE TRIGGER trigger_update_documento_proyecto
 BEFORE UPDATE ON documento_proyecto
 FOR EACH ROW
 EXECUTE FUNCTION actualizar_modified_date();
@@ -210,6 +273,6 @@ select * from proyecto;
 select * from documento_proyecto;
 select * from proyecto_objetivo_especifico;
 
-update tipo_proyecto set nombre='Proyecto Interno Test' where id=101;
+-- update tipo_proyecto set nombre='Proyecto Interno Test' where id=101;
 
-select * from tipo_proyecto;
+
