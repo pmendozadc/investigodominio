@@ -36,11 +36,11 @@ public class Proyecto {
 	private OffsetDateTime fechaFin;
 	@Column(name = "estado")
 	private Boolean estado;
+	@Column(name = "id_hoja_seguimiento")
+	private String idHojaSeguimiento;
 
 	@Column(name = "id_tipo_proyecto")
 	private Integer idTipoProyecto;
-	@Column(name = "id_hoja_seguimiento")
-	private Integer idHojaSeguimiento;
 	@Column(name = "id_grupo_asignado")
 	private Integer idGrupoAsignado;
 	@Column(name = "id_estado_proyecto")
@@ -151,11 +151,11 @@ public class Proyecto {
 		this.idTipoProyecto = idTipoProyecto;
 	}
 
-	public Integer getIdHojaSeguimiento() {
+	public String getIdHojaSeguimiento() {
 		return idHojaSeguimiento;
 	}
 
-	public void setIdHojaSeguimiento(Integer idHojaSeguimiento) {
+	public void setIdHojaSeguimiento(String idHojaSeguimiento) {
 		this.idHojaSeguimiento = idHojaSeguimiento;
 	}
 

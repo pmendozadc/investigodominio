@@ -28,7 +28,8 @@ FROM
     JOIN pg_class tbl ON tbl.oid = c.conrelid
     JOIN pg_attribute col ON col.attrelid = c.conrelid AND col.attnum = ANY(c.conkey)
     JOIN pg_class referenced_tbl ON referenced_tbl.oid = c.confrelid
-    JOIN pg_attribute referenced_col ON referenced_col.attrelid = c.confrelid AND referenced_col.attnum = ANY(c.confkey)
+    JOIN pg_attribute referenced_col ON referenced_col.attrelid = c.confrelid
+    AND referenced_col.attnum = ANY(c.confkey)
 WHERE
     c.contype = 'f' AND
     nsp.nspname = 'public'
@@ -42,50 +43,12 @@ SELECT
 FROM pg_stat_activity
 WHERE backend_type = 'client backend';
 
+-- ---------------------------------------------------------
 
-
-
+DROP TABLE IF EXISTS documento_proyecto;
+DROP TABLE IF EXISTS proyecto_objetivo_especifico;
 DROP TABLE IF EXISTS proyecto;
 DROP TABLE IF EXISTS tipo_proyecto;
-DROP TABLE IF EXISTS proyecto_objetivo_especifico;
-DROP TABLE IF EXISTS documento_proyecto;
-
--- ------- Tabla proyecto ----------------------------------
-CREATE TABLE proyecto(
-    id                      INTEGER PRIMARY KEY,
-    nombre                  VARCHAR(200),
-    email_lider             VARCHAR(200),
-    id_carpeta              VARCHAR(200),
-    objetivo_general        VARCHAR(500),
-    fecha_creacion          TIMESTAMP WITH TIME ZONE,
-    fecha_inicio            TIMESTAMP WITH TIME ZONE,
-    fecha_fin               TIMESTAMP WITH TIME ZONE,
-    estado                  BOOLEAN DEFAULT TRUE,
-
-    id_tipo_proyecto        INTEGER,
-    id_hoja_seguimiento     INTEGER,
-    id_grupo_asignado       INTEGER,
-    id_estado_proyecto      INTEGER,
-
-    created_by              INTEGER,
-    created_date            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    modified_by             INTEGER,
-    modified_date           TIMESTAMP WITH TIME ZONE
-);
-
-DROP SEQUENCE IF EXISTS proyecto_id_seq;
-
-CREATE SEQUENCE proyecto_id_seq
-    START WITH 1001
-    INCREMENT BY 1
-    MINVALUE 1001
-    MAXVALUE 999999;
-
-ALTER TABLE
-    proyecto
-ALTER
-    COLUMN id
-    SET DEFAULT nextval('proyecto_id_seq');
 
 -- ------- Tabla tipo_proyecto -----------------------------
 CREATE TABLE tipo_proyecto(
@@ -112,6 +75,61 @@ ALTER TABLE
 ALTER
     COLUMN id
     SET DEFAULT nextval('tipo_proyecto_id_seq');
+
+-- ------- Tabla proyecto ----------------------------------
+CREATE TABLE proyecto(
+    id                      INTEGER PRIMARY KEY,
+    nombre                  VARCHAR(200),
+    email_lider             VARCHAR(200),
+    id_carpeta              VARCHAR(200),
+    objetivo_general        VARCHAR(500),
+    fecha_creacion          TIMESTAMP WITH TIME ZONE,
+    fecha_inicio            TIMESTAMP WITH TIME ZONE,
+    fecha_fin               TIMESTAMP WITH TIME ZONE,
+    estado                  BOOLEAN DEFAULT TRUE,
+    id_hoja_seguimiento     VARCHAR(200),
+
+    id_tipo_proyecto        INTEGER,
+    id_grupo_asignado       INTEGER,
+    id_estado_proyecto      INTEGER,
+
+    created_by              INTEGER,
+    created_date            TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    modified_by             INTEGER,
+    modified_date           TIMESTAMP WITH TIME ZONE
+);
+
+DROP SEQUENCE IF EXISTS proyecto_id_seq;
+
+CREATE SEQUENCE proyecto_id_seq
+    START WITH 1001
+    INCREMENT BY 1
+    MINVALUE 1001
+    MAXVALUE 999999;
+
+ALTER TABLE
+    proyecto
+ALTER
+    COLUMN id
+    SET DEFAULT nextval('proyecto_id_seq');
+
+ALTER TABLE
+    proyecto
+ADD CONSTRAINT
+    fk_proyecto_tipo_proyecto
+FOREIGN KEY (id_tipo_proyecto) REFERENCES tipo_proyecto(id);
+
+ALTER TABLE
+    proyecto
+ADD CONSTRAINT
+    fk_proyecto_grupo
+FOREIGN KEY (id_grupo_asignado) REFERENCES grupo(id);
+
+ALTER TABLE
+    proyecto
+ADD CONSTRAINT
+    fk_proyecto_estado_proyecto
+FOREIGN KEY (id_estado_proyecto) REFERENCES estado_proyecto(id);
 
 -- ------- Tabla proyecto_objetivo_especifico --------------
 CREATE TABLE proyecto_objetivo_especifico(
@@ -140,6 +158,13 @@ ALTER TABLE
 ALTER
     COLUMN id
     SET DEFAULT nextval('proyecto_objetivo_especifico_id_seq');
+
+ALTER TABLE
+    proyecto_objetivo_especifico
+ADD CONSTRAINT
+    fk_objetivo_especifico_proyecto
+FOREIGN KEY (id_proyecto) REFERENCES proyecto(id);
+
 
 -- ------- Tabla documento_proyecto ------------------------
 CREATE TABLE documento_proyecto(
@@ -170,77 +195,192 @@ ALTER
     COLUMN id
     SET DEFAULT nextval('documento_proyecto_id_seq');
 
+ALTER TABLE
+    documento_proyecto
+ADD CONSTRAINT
+    fk_documento_proyecto_proyecto
+FOREIGN KEY (id_proyecto) REFERENCES proyecto(id);
+
 -- ---------- Funciones para los triggers ----------------
 
-CREATE OR REPLACE FUNCTION actualizar_modified_date()
-RETURNS TRIGGER AS
-$$
+CREATE OR REPLACE FUNCTION insert_nuevo_record ()
+RETURNS TRIGGER AS $$
+DECLARE
+    column_name TEXT;
+    update_parts TEXT[] := '{}';
+    update_stmt TEXT;
+    is_not_null BOOLEAN;
 BEGIN
-    RAISE NOTICE 'Trigger activado: actualizar_modified_date';
-    NEW.modified_date = (CURRENT_TIMESTAMP AT TIME ZONE 'America/Lima')::timestamptz;
-    RETURN NEW;
+    -- Check if we're in a recursive call
+    IF current_setting('triggers.in_update', TRUE) = 'true' THEN
+        RETURN NULL;
+    END IF;
+
+    RAISE NOTICE 'Trigger activado: after insert para %', TG_TABLE_NAME;
+
+    -- Set session variable to indicate we're in an update operation
+    PERFORM set_config('triggers.in_update', 'true', TRUE);
+
+    EXECUTE 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
+            ' SET created_date = $1 WHERE id = $2'
+    USING (CURRENT_TIMESTAMP AT TIME ZONE 'America/Lima')::timestamptz, NEW.id;
+
+    FOR column_name IN
+        SELECT c.column_name
+        FROM information_schema.columns c
+        WHERE c.table_schema = TG_TABLE_SCHEMA
+        AND c.table_name = TG_TABLE_NAME
+        AND c.data_type IN ('character varying', 'varchar', 'text', 'char', 'character')
+    LOOP
+
+        EXECUTE 'SELECT $1.' || quote_ident(column_name) || ' IS NOT NULL' INTO is_not_null USING NEW;
+
+        IF is_not_null THEN
+
+            update_parts := array_append(update_parts,
+                            quote_ident(column_name) || ' = UPPER(' ||
+                            quote_ident(column_name) || ')');
+        END IF;
+    END LOOP;
+
+
+    IF array_length(update_parts, 1) > 0 THEN
+        update_stmt := 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
+                     ' SET ' || array_to_string(update_parts, ', ') ||
+                     ' WHERE id = $1';
+        EXECUTE update_stmt USING NEW.id;
+    END IF;
+
+    -- Reset session variable
+    PERFORM set_config('triggers.in_update', 'false', TRUE);
+
+    RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION update_record ()
+RETURNS TRIGGER AS $$
+DECLARE
+    column_name TEXT;
+    update_parts TEXT[] := '{}';
+    update_stmt TEXT;
+    is_not_null BOOLEAN;
+BEGIN
+    -- Check if we're in a recursive call
+    IF current_setting('triggers.in_update', TRUE) = 'true' THEN
+        RETURN NULL;
+    END IF;
+
+    RAISE NOTICE 'Trigger activado: after update para %', TG_TABLE_NAME;
+
+    -- Set session variable to indicate we're in an update operation
+    PERFORM set_config('triggers.in_update', 'true', TRUE);
+
+    EXECUTE 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
+            ' SET modified_date = $1 WHERE id = $2'
+    USING (CURRENT_TIMESTAMP AT TIME ZONE 'America/Lima')::timestamptz, NEW.id;
+
+    FOR column_name IN
+        SELECT c.column_name
+        FROM information_schema.columns c
+        WHERE c.table_schema = TG_TABLE_SCHEMA
+        AND c.table_name = TG_TABLE_NAME
+        AND c.data_type IN ('character varying', 'varchar', 'text', 'char', 'character')
+    LOOP
+
+        EXECUTE 'SELECT $1.' || quote_ident(column_name) || ' IS NOT NULL' INTO is_not_null USING NEW;
+
+        IF is_not_null THEN
+
+            update_parts := array_append(update_parts,
+                            quote_ident(column_name) || ' = UPPER(' ||
+                            quote_ident(column_name) || ')');
+        END IF;
+    END LOOP;
+
+
+    IF array_length(update_parts, 1) > 0 THEN
+        update_stmt := 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
+                     ' SET ' || array_to_string(update_parts, ', ') ||
+                     ' WHERE id = $1';
+        EXECUTE update_stmt USING NEW.id;
+    END IF;
+
+    -- Reset session variable
+    PERFORM set_config('triggers.in_update', 'false', TRUE);
+
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+
 -- ----------- Triggers ----------------------------------
 
-DROP TRIGGER IF EXISTS trigger_create_proyecto ON proyecto;
+DROP TRIGGER IF EXISTS trigger_insert_proyecto
+    ON proyecto;
 
-CREATE TRIGGER trigger_create_proyecto
-BEFORE INSERT ON proyecto
+CREATE TRIGGER trigger_insert_proyecto
+AFTER INSERT ON proyecto
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION insert_nuevo_record();
 
-DROP TRIGGER IF EXISTS trigger_update_tipo_proyecto ON tipo_proyecto;
+DROP TRIGGER IF EXISTS trigger_insert_tipo_proyecto
+    ON tipo_proyecto;
 
-CREATE TRIGGER trigger_update_tipo_proyecto
-BEFORE UPDATE ON tipo_proyecto
+CREATE TRIGGER trigger_insert_tipo_proyecto
+AFTER INSERT ON tipo_proyecto
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION insert_nuevo_record();
 
-DROP TRIGGER IF EXISTS trigger_update_proyecto_objetivo_especifico ON proyecto_objetivo_especifico;
+DROP TRIGGER IF EXISTS trigger_insert_proyecto_objetivo_especifico
+    ON proyecto_objetivo_especifico;
 
-CREATE TRIGGER trigger_update_proyecto_objetivo_especifico
-BEFORE UPDATE ON proyecto_objetivo_especifico
+CREATE TRIGGER trigger_insert_proyecto_objetivo_especifico
+AFTER INSERT ON proyecto_objetivo_especifico
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION insert_nuevo_record();
 
-DROP TRIGGER IF EXISTS trigger_update_documento_proyecto
-ON documento_proyecto;
+DROP TRIGGER IF EXISTS trigger_insert_documento_proyecto
+    ON documento_proyecto;
 
-CREATE TRIGGER trigger_update_documento_proyecto
-BEFORE UPDATE ON documento_proyecto
+CREATE TRIGGER trigger_insert_documento_proyecto
+AFTER INSERT ON documento_proyecto
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION insert_nuevo_record();
 
+-- updates --------------------------------------------
 
-DROP TRIGGER IF EXISTS trigger_update_proyecto ON proyecto;
+DROP TRIGGER IF EXISTS trigger_update_proyecto
+    ON proyecto;
 
 CREATE TRIGGER trigger_update_proyecto
-BEFORE UPDATE ON proyecto
+AFTER UPDATE ON proyecto
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION update_record();
 
-DROP TRIGGER IF EXISTS trigger_update_tipo_proyecto ON tipo_proyecto;
+DROP TRIGGER IF EXISTS trigger_update_tipo_proyecto
+    ON tipo_proyecto;
 
 CREATE TRIGGER trigger_update_tipo_proyecto
-BEFORE UPDATE ON tipo_proyecto
+AFTER UPDATE ON tipo_proyecto
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION update_record();
 
-DROP TRIGGER IF EXISTS trigger_update_proyecto_objetivo_especifico ON proyecto_objetivo_especifico;
+DROP TRIGGER IF EXISTS trigger_update_proyecto_objetivo_especifico
+    ON proyecto_objetivo_especifico;
 
 CREATE TRIGGER trigger_update_proyecto_objetivo_especifico
-BEFORE UPDATE ON proyecto_objetivo_especifico
+AFTER UPDATE ON proyecto_objetivo_especifico
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION update_record();
 
-DROP TRIGGER IF EXISTS trigger_update_documento_proyecto ON documento_proyecto;
+DROP TRIGGER IF EXISTS trigger_update_documento_proyecto
+    ON documento_proyecto;
 
 CREATE TRIGGER trigger_update_documento_proyecto
-BEFORE UPDATE ON documento_proyecto
+AFTER UPDATE ON documento_proyecto
 FOR EACH ROW
-EXECUTE FUNCTION actualizar_modified_date();
+EXECUTE FUNCTION update_record();
 
 -- ---------- Mock Data-----------------------------------
 
@@ -253,19 +393,19 @@ values (
 insert into proyecto
 (nombre, email_lider, id_carpeta, objetivo_general, fecha_inicio, fecha_fin, id_tipo_proyecto, id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by)
 values (
-    'Proyecto 1','lider@mail.com', 'asdf', 'objetivo general 1', null, null, 1, null, null, null, 1
+    'Proyecto 1','lider@mail.com', 'asdf', 'objetivo general 1', null, null, (select currval('tipo_proyecto_id_seq')), null, null, null, 1
 );
 
 insert into documento_proyecto
 (titulo, tiene_marcadores, id_proyecto, created_by)
 values (
-    'documento 1', false, 1, 1
+    'documento 1', false, (select currval('proyecto_id_seq')), 1
 );
 
 insert into proyecto_objetivo_especifico
 (objetivo_especifico, id_proyecto, created_by)
 values (
-    'Objetivo específico 1', 1, 1
+    'Objetivo específico 1', (select currval('proyecto_id_seq')), 1
 );
 
 select * from tipo_proyecto;
@@ -273,6 +413,12 @@ select * from proyecto;
 select * from documento_proyecto;
 select * from proyecto_objetivo_especifico;
 
--- update tipo_proyecto set nombre='Proyecto Interno Test' where id=101;
+-- Test insert triggers
+insert into tipo_proyecto
+    (nombre, created_by)
+values (
+    'Proyecto Externo 2', 1
+);
 
+update tipo_proyecto set nombre='Proyecto Interno Test update' where id=1001;
 
