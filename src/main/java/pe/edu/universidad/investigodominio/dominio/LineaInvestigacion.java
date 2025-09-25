@@ -2,16 +2,18 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import java.time.OffsetDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 public class LineaInvestigacion {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="linea_investigacion_id_seq")
+    @SequenceGenerator(name="linea_investigacion_id_seq",sequenceName="linea_investigacion_id_seq", allocationSize=1)
     private int id;
 
     private String nombre;
