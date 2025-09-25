@@ -211,14 +211,13 @@ DECLARE
     update_stmt TEXT;
     is_not_null BOOLEAN;
 BEGIN
-    -- Check if we're in a recursive call
+
     IF current_setting('triggers.in_update', TRUE) = 'true' THEN
         RETURN NULL;
     END IF;
 
     RAISE NOTICE 'Trigger activado: after insert para %', TG_TABLE_NAME;
 
-    -- Set session variable to indicate we're in an update operation
     PERFORM set_config('triggers.in_update', 'true', TRUE);
 
     EXECUTE 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
@@ -243,7 +242,6 @@ BEGIN
         END IF;
     END LOOP;
 
-
     IF array_length(update_parts, 1) > 0 THEN
         update_stmt := 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
                      ' SET ' || array_to_string(update_parts, ', ') ||
@@ -251,7 +249,6 @@ BEGIN
         EXECUTE update_stmt USING NEW.id;
     END IF;
 
-    -- Reset session variable
     PERFORM set_config('triggers.in_update', 'false', TRUE);
 
     RETURN NULL;
@@ -266,14 +263,13 @@ DECLARE
     update_stmt TEXT;
     is_not_null BOOLEAN;
 BEGIN
-    -- Check if we're in a recursive call
+
     IF current_setting('triggers.in_update', TRUE) = 'true' THEN
         RETURN NULL;
     END IF;
 
     RAISE NOTICE 'Trigger activado: after update para %', TG_TABLE_NAME;
 
-    -- Set session variable to indicate we're in an update operation
     PERFORM set_config('triggers.in_update', 'true', TRUE);
 
     EXECUTE 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
@@ -298,7 +294,6 @@ BEGIN
         END IF;
     END LOOP;
 
-
     IF array_length(update_parts, 1) > 0 THEN
         update_stmt := 'UPDATE ' || quote_ident(TG_TABLE_NAME) ||
                      ' SET ' || array_to_string(update_parts, ', ') ||
@@ -306,7 +301,6 @@ BEGIN
         EXECUTE update_stmt USING NEW.id;
     END IF;
 
-    -- Reset session variable
     PERFORM set_config('triggers.in_update', 'false', TRUE);
 
     RETURN NULL;
