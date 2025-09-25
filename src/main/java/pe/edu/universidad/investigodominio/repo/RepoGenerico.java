@@ -1,6 +1,7 @@
 package pe.edu.universidad.investigodominio.repo;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import pe.edu.universidad.investigodominio.util.UtilClases;
 
@@ -15,6 +17,9 @@ import pe.edu.universidad.investigodominio.util.UtilClases;
 public class RepoGenerico {
 
 	private static final String strPackDominio = "pe.edu.universidad.investigodominio.dominio.";
+
+	private static final String strEstado = "estado";
+	private static final String strActivo = "activo";
 	
     @PersistenceContext
     private EntityManager entityManager;
@@ -29,6 +34,8 @@ public class RepoGenerico {
     public Object insert(String entidadNombre, Map<String, Object> map) {
     	Object obj = UtilClases.obtenerObjeto(strPackDominio+entidadNombre, map);
 		entityManager.persist(obj);
+		entityManager.flush();
+		entityManager.refresh(obj);
 		return obj;
 	}
     
@@ -39,7 +46,7 @@ public class RepoGenerico {
     	T entity = entityManager.find(entityClass, id);
     	if (entity != null) {
     		UtilClases.copiarData(entity, map);
-    		entityManager.persist(entity);
+    		entityManager.merge(entity); 
     	}
 		return Optional.ofNullable(entity);
 	}
@@ -49,8 +56,46 @@ public class RepoGenerico {
     	Class<T> entityClass = UtilClases.obtenerClase(strPackDominio+entidadNombre);
     	T entity = entityManager.find(entityClass, id);
     	if (entity != null) {
+    		UtilClases.establecerDato(entity, strEstado, false);
+    		entityManager.persist(entity);
+    	}
+		return Optional.ofNullable(entity);
+	}
+    
+    @Transactional
+    public <T, ID extends Serializable> Optional<T> deleteHard(String entidadNombre, int id) {
+    	Class<T> entityClass = UtilClases.obtenerClase(strPackDominio+entidadNombre);
+    	T entity = entityManager.find(entityClass, id);
+    	if (entity != null) {
     		entityManager.remove(entity);
     	}
 		return Optional.ofNullable(entity);
 	}
+    
+    @Transactional
+    public <T, ID extends Serializable> Optional<T> activar(String entidadNombre, int id) {
+    	Class<T> entityClass = UtilClases.obtenerClase(strPackDominio+entidadNombre);
+    	T entity = entityManager.find(entityClass, id);
+    	if (entity != null) {
+    		UtilClases.establecerDato(entity, strActivo, true);
+    		entityManager.persist(entity);
+    	}
+		return Optional.ofNullable(entity);
+	}
+    
+    @Transactional
+    public <T, ID extends Serializable> Optional<T> inactivar(String entidadNombre, int id) {
+    	Class<T> entityClass = UtilClases.obtenerClase(strPackDominio+entidadNombre);
+    	T entity = entityManager.find(entityClass, id);
+    	if (entity != null) {
+    		UtilClases.establecerDato(entity, strActivo, false);
+    		entityManager.persist(entity);
+    	}
+		return Optional.ofNullable(entity);
+	}
+    
+    public <T, ID extends Serializable> Optional<T> consultarNativa(String sql) {
+        Query query = entityManager.createNativeQuery(sql);
+        return Optional.ofNullable(query.getResultList()); // Devuelve lista de Object[]
+    }
 }
