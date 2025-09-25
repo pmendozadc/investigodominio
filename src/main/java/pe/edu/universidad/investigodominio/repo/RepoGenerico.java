@@ -46,7 +46,9 @@ public class RepoGenerico {
     	T entity = entityManager.find(entityClass, id);
     	if (entity != null) {
     		UtilClases.copiarData(entity, map);
-    		entityManager.merge(entity); 
+    		entityManager.merge(entity);
+    		entityManager.flush();
+    		entityManager.refresh(entity);
     	}
 		return Optional.ofNullable(entity);
 	}

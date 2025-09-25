@@ -1,6 +1,7 @@
 package pe.edu.universidad.investigodominio.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +25,14 @@ public class ControllerData {
 	private static final String strSql = "sql";
 	@Autowired
 	private ServiceGenerico serviceGenerico;
+	
+	@PostMapping("/tx")
+	public ResponseEntity postTransaccion(@RequestBody List<Map<String, Object>> lst) {
+	    Map<String, Object> mapOps = lst.get(0);
+	    Object obj = null;
+	    //serviceGenerico.create(entidadNombre, map);
+	    return ResponseEntity.ok(obj);
+	}
 	
 	@PostMapping("/c/{entidad}")
 	public ResponseEntity postEntidad(@PathVariable("entidad") String entidadNombre, @RequestBody Map<String, Object> map) {
