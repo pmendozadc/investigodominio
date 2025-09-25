@@ -105,6 +105,7 @@ public class ControllerData {
 	    }
 	    return ResponseEntity.ok(entidadOpt.get());
 	}
+	
 	@PostMapping("/n")
 	public ResponseEntity consultarSQLNativo(@RequestBody Map<String, Object> map) {
 		String sql = (String) map.get(strSql);

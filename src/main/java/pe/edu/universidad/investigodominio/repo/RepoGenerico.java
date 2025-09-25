@@ -1,6 +1,7 @@
 package pe.edu.universidad.investigodominio.repo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +21,19 @@ public class RepoGenerico {
 
 	private static final String strEstado = "estado";
 	private static final String strActivo = "activo";
+	private static final String strOp = "op";
+	private static final String strRet = "ret";
+	private static final String strEntidad = "entidad";
+	private static final String strObj = "obj";
+	private static final String strC = "c";
+	private static final String strR = "r";
+	private static final String strU = "u";
+	private static final String strD = "d";
+	private static final String strDh = "dh";
+	private static final String strA = "a";
+	private static final String strI = "i";
+	private static final String strId = "id";
+	private static final String strTrue = "true";
 	
     @PersistenceContext
     private EntityManager entityManager;
@@ -100,4 +114,74 @@ public class RepoGenerico {
         Query query = entityManager.createNativeQuery(sql);
         return Optional.ofNullable(query.getResultList()); // Devuelve lista de Object[]
     }
+    
+    @Transactional
+    public List<Object> tx(List<Map<String, Object>> lstOp) {
+    	List<Object> lstRet = new ArrayList<Object>();
+    	Object objRetorno = null;
+    	for (Map<String,Object> mapOp : lstOp) {
+			String op = mapOp.get(strOp).toString();
+			String entidadNombre = mapOp.get(strEntidad).toString();
+			if (op.equals(strC)) {
+				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
+				objRetorno = insert(entidadNombre, mapObjeto);
+				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+					lstRet.add(objRetorno);
+				}
+			} else if (op.equals(strU)) {
+				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
+				objRetorno = update(entidadNombre, mapObjeto);
+				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+					lstRet.add(objRetorno);
+				}
+			} else if (op.equals(strD)) {
+				int id = 0;
+				try {
+					id = Integer.parseInt(mapOp.get(strId).toString());
+				} catch (Exception e) {
+					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+				}
+				objRetorno = delete(entidadNombre, id);
+				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+					lstRet.add(objRetorno);
+				}
+			} else if (op.equals(strDh)) {
+				int id = 0;
+				try {
+					id = Integer.parseInt(mapOp.get(strId).toString());
+				} catch (Exception e) {
+					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+				}
+				objRetorno = deleteHard(entidadNombre, id);
+				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+					lstRet.add(objRetorno);
+				}
+			} else if (op.equals(strA)) {
+				int id = 0;
+				try {
+					id = Integer.parseInt(mapOp.get(strId).toString());
+				} catch (Exception e) {
+					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+				}
+				objRetorno = activar(entidadNombre, id);
+				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+					lstRet.add(objRetorno);
+				}
+			} else if (op.equals(strI)) {
+				int id = 0;
+				try {
+					id = Integer.parseInt(mapOp.get(strId).toString());
+				} catch (Exception e) {
+					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+				}
+				objRetorno = inactivar(entidadNombre, id);
+				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+					lstRet.add(objRetorno);
+				}
+			} else {
+				throw new RuntimeException("No se encontro identica la operacion "+op+ " como una operacion valida");
+			}
+		}
+		return lstRet;
+	}
 }
