@@ -1,5 +1,6 @@
 package pe.edu.universidad.investigodominio.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -56,5 +57,10 @@ public class ServiceGenerico {
 	public Optional consultarNativa(String sql) {
 		Optional opt = repoGenerico.consultarNativa(sql);
 		return opt;
+	}
+	
+	public List<Object> ejecutarTx(List<Map<String, Object>> lstOp) {
+		return repoGenerico.tx(lstOp);
+		
 	}
 }

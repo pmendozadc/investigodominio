@@ -28,10 +28,8 @@ public class ControllerData {
 	
 	@PostMapping("/tx")
 	public ResponseEntity postTransaccion(@RequestBody List<Map<String, Object>> lst) {
-	    Map<String, Object> mapOps = lst.get(0);
-	    Object obj = null;
-	    //serviceGenerico.create(entidadNombre, map);
-	    return ResponseEntity.ok(obj);
+	    List<Object> lstRetorno = serviceGenerico.ejecutarTx(lst);
+	    return ResponseEntity.ok(lstRetorno);
 	}
 	
 	@PostMapping("/c/{entidad}")

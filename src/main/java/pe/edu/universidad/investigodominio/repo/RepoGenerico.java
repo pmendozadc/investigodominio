@@ -2,6 +2,7 @@ package pe.edu.universidad.investigodominio.repo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,6 +35,8 @@ public class RepoGenerico {
 	private static final String strI = "i";
 	private static final String strId = "id";
 	private static final String strTrue = "true";
+	private static final String strKey = "key";
+	private static final String strNKey = "#key";
 	
     @PersistenceContext
     private EntityManager entityManager;
@@ -119,17 +122,24 @@ public class RepoGenerico {
     public List<Object> tx(List<Map<String, Object>> lstOp) {
     	List<Object> lstRet = new ArrayList<Object>();
     	Object objRetorno = null;
+    	Map<String, Object> mapKeys = new HashMap<String, Object>();
     	for (Map<String,Object> mapOp : lstOp) {
 			String op = mapOp.get(strOp).toString();
 			String entidadNombre = mapOp.get(strEntidad).toString();
 			if (op.equals(strC)) {
 				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
+				llenarKeysEnObjeto(mapObjeto, mapKeys);
 				objRetorno = insert(entidadNombre, mapObjeto);
 				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
 					lstRet.add(objRetorno);
 				}
+				Object objId = UtilClases.obtenerDato(objRetorno, strId);
+				if (mapOp.get(strKey) != null) {
+					mapKeys.put(mapOp.get(strKey).toString(), objId);
+				}
 			} else if (op.equals(strU)) {
 				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
+				llenarKeysEnObjeto(mapObjeto, mapKeys);
 				objRetorno = update(entidadNombre, mapObjeto);
 				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
 					lstRet.add(objRetorno);
@@ -183,5 +193,16 @@ public class RepoGenerico {
 			}
 		}
 		return lstRet;
+	}
+
+	private void llenarKeysEnObjeto(Map<String, Object> mapObjeto, Map<String, Object> mapKeys) {
+		for (String k : mapObjeto.keySet()) {
+			if (mapObjeto.get(k)!=null && mapObjeto.get(k).toString().startsWith(strNKey)) {
+				String key = mapObjeto.get(k).toString().substring(4);
+				if (mapKeys.get(key) != null) {
+					mapObjeto.replace(k, mapKeys.get(key));
+				}
+			}
+		}
 	}
 }
