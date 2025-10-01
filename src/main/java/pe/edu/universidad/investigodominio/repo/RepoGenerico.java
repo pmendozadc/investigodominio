@@ -13,6 +13,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import pe.edu.universidad.investigodominio.exception.EstructuraInvalidaException;
 import pe.edu.universidad.investigodominio.util.UtilClases;
 
 @Repository
@@ -124,9 +125,18 @@ public class RepoGenerico {
     	Object objRetorno = null;
     	Map<String, Object> mapKeys = new HashMap<String, Object>();
     	for (Map<String,Object> mapOp : lstOp) {
-			String op = mapOp.get(strOp).toString();
+			if (mapOp.get(strOp)==null) {
+				throw new EstructuraInvalidaException("La peticion debe indicar el campo op para la operacion");
+			}
+			if (mapOp.get(strEntidad)==null) {
+				throw new EstructuraInvalidaException("La peticion debe indicar el campo entidad para la entidad/tabla");
+			}
+    		String op = mapOp.get(strOp).toString();
 			String entidadNombre = mapOp.get(strEntidad).toString();
 			if (op.equals(strC)) {
+				if (mapOp.get(strObj)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
+				}
 				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
 				llenarKeysEnObjeto(mapObjeto, mapKeys);
 				objRetorno = insert(entidadNombre, mapObjeto);
@@ -138,6 +148,9 @@ public class RepoGenerico {
 					mapKeys.put(mapOp.get(strKey).toString(), objId);
 				}
 			} else if (op.equals(strU)) {
+				if (mapOp.get(strObj)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
+				}
 				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
 				llenarKeysEnObjeto(mapObjeto, mapKeys);
 				objRetorno = update(entidadNombre, mapObjeto);
@@ -145,6 +158,9 @@ public class RepoGenerico {
 					lstRet.add(objRetorno);
 				}
 			} else if (op.equals(strD)) {
+				if (mapOp.get(strId)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+				}
 				int id = 0;
 				try {
 					id = Integer.parseInt(mapOp.get(strId).toString());
@@ -156,6 +172,9 @@ public class RepoGenerico {
 					lstRet.add(objRetorno);
 				}
 			} else if (op.equals(strDh)) {
+				if (mapOp.get(strId)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+				}
 				int id = 0;
 				try {
 					id = Integer.parseInt(mapOp.get(strId).toString());
@@ -167,6 +186,9 @@ public class RepoGenerico {
 					lstRet.add(objRetorno);
 				}
 			} else if (op.equals(strA)) {
+				if (mapOp.get(strId)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+				}
 				int id = 0;
 				try {
 					id = Integer.parseInt(mapOp.get(strId).toString());
@@ -178,6 +200,9 @@ public class RepoGenerico {
 					lstRet.add(objRetorno);
 				}
 			} else if (op.equals(strI)) {
+				if (mapOp.get(strId)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+				}
 				int id = 0;
 				try {
 					id = Integer.parseInt(mapOp.get(strId).toString());
@@ -189,7 +214,7 @@ public class RepoGenerico {
 					lstRet.add(objRetorno);
 				}
 			} else {
-				throw new RuntimeException("No se encontro identica la operacion "+op+ " como una operacion valida");
+				throw new RuntimeException("No se encontro la operacion "+op+ " como una operacion valida");
 			}
 		}
 		return lstRet;
