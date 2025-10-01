@@ -80,7 +80,7 @@ ALTER
 CREATE TABLE proyecto(
     id                      INTEGER PRIMARY KEY,
     nombre                  VARCHAR(200),
-    email_lider             VARCHAR(200),
+    id_lider                INTEGER,
     id_carpeta              VARCHAR(200),
     objetivo_general        VARCHAR(500),
     fecha_creacion          TIMESTAMP WITH TIME ZONE,
@@ -375,44 +375,4 @@ CREATE TRIGGER trigger_update_documento_proyecto
 AFTER UPDATE ON documento_proyecto
 FOR EACH ROW
 EXECUTE FUNCTION update_record();
-
--- ---------- Mock Data-----------------------------------
-
-insert into tipo_proyecto
-(nombre, created_by)
-values (
-        'Proyecto Interno', 1
-);
-
-insert into proyecto
-(nombre, email_lider, id_carpeta, objetivo_general, fecha_inicio, fecha_fin, id_tipo_proyecto, id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by)
-values (
-    'Proyecto 1','lider@mail.com', 'asdf', 'objetivo general 1', null, null, (select currval('tipo_proyecto_id_seq')), null, null, null, 1
-);
-
-insert into documento_proyecto
-(titulo, tiene_marcadores, id_proyecto, created_by)
-values (
-    'documento 1', false, (select currval('proyecto_id_seq')), 1
-);
-
-insert into proyecto_objetivo_especifico
-(objetivo_especifico, id_proyecto, created_by)
-values (
-    'Objetivo específico 1', (select currval('proyecto_id_seq')), 1
-);
-
-select * from tipo_proyecto;
-select * from proyecto;
-select * from documento_proyecto;
-select * from proyecto_objetivo_especifico;
-
--- Test insert triggers
-insert into tipo_proyecto
-    (nombre, created_by)
-values (
-    'Proyecto Externo 2', 1
-);
-
-update tipo_proyecto set nombre='Proyecto Interno Test update' where id=1001;
 
