@@ -2,29 +2,31 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.time.OffsetDateTime;
 
 @Entity
 @DynamicInsert
+@DynamicUpdate
 public class Usuario {
 
     @Id
     @GeneratedValue(generator="usuario_id_seq")
     @SequenceGenerator(name="usuario_id_seq",sequenceName="usuario_id_seq", allocationSize=1)
     private int id;
-
     private String nombre;
     private String apellido;
     private String dni;
     private String email;
+
     private Boolean estado;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
-    private Integer rolId;
 
-    public Usuario(int id, String nombre, String apellido, String dni, Boolean estado, String email, OffsetDateTime createdDate, Integer createdBy, OffsetDateTime modifiedDate, Integer modifiedBy, Integer rolId) {
+    public Usuario(int id, String nombre, String apellido, String dni, Boolean estado, String email, OffsetDateTime createdDate, Integer createdBy, OffsetDateTime modifiedDate, Integer modifiedBy) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -35,7 +37,6 @@ public class Usuario {
         this.createdBy = createdBy;
         this.modifiedDate = modifiedDate;
         this.modifiedBy = modifiedBy;
-        this.rolId = rolId;
     }
 
     public Usuario() {}
@@ -71,6 +72,4 @@ public class Usuario {
     public Integer getModifiedBy() { return modifiedBy; }
     public void setModifiedBy(Integer modifiedBy) { this.modifiedBy = modifiedBy; }
 
-    public Integer getRolId() { return rolId; }
-    public void setRolId(Integer rolId) { this.rolId = rolId; }
 }

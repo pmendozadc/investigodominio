@@ -9,47 +9,61 @@ import java.time.OffsetDateTime;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class Rol {
-	@Id
-    @GeneratedValue(generator="rol_id_seq")
-    @SequenceGenerator(name="rol_id_seq",sequenceName="rol_id_seq", allocationSize=1)
-	private int id;
-	private String nombre;
+public class RelacionRolUsuario {
+    @Id
+    @GeneratedValue(generator="relacion_rol_usuario_id_seq")
+    @SequenceGenerator(name="relacion_rol_usuario_id_seq",sequenceName="relacion_rol_usuario_id_seq", allocationSize=1)
+    private int id;
 
-	private Boolean estado;
+    private Boolean estado;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
 
-    public Rol() {}
+    private Integer id_usuario;
+    private Integer id_rol;
 
-    public Rol(int id, String nombre, Boolean estado, OffsetDateTime createdDate, OffsetDateTime modifiedDate, Integer createdBy, Integer modifiedBy) {
+    public RelacionRolUsuario() {}
+
+    public RelacionRolUsuario(int id, Boolean estado, Integer id_rol, Integer id_usuario, Integer modifiedBy, Integer createdBy, OffsetDateTime modifiedDate, OffsetDateTime createdDate) {
         this.id = id;
-        this.nombre = nombre;
         this.estado = estado;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-        this.createdBy = createdBy;
+        this.id_rol = id_rol;
+        this.id_usuario = id_usuario;
         this.modifiedBy = modifiedBy;
+        this.createdBy = createdBy;
+        this.modifiedDate = modifiedDate;
+        this.createdDate = createdDate;
     }
 
+
+
     public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id; 
-	}
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public Boolean getEstado() { return estado; }
+    public Boolean getEstado() { return estado; }
     public void setEstado(Boolean estado) { this.estado = estado; }
+
+    public Integer getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(Integer id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
+    public Integer getId_rol() {
+        return id_rol;
+    }
+
+    public void setId_rol(Integer id_rol) {
+        this.id_rol = id_rol;
+    }
 
     public OffsetDateTime getCreatedDate() { return createdDate; }
     public void setCreatedDate(OffsetDateTime createdDate) { this.createdDate = createdDate; }
