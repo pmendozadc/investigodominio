@@ -116,7 +116,7 @@ public class RepoGenerico {
     
     public <T, ID extends Serializable> Optional<T> consultarNativa(String sql) {
         Query query = entityManager.createNativeQuery(sql);
-        return Optional.ofNullable(query.getResultList()); // Devuelve lista de Object[]
+        return (Optional<T>) Optional.ofNullable(query.getResultList()); // Devuelve lista de Object[]
     }
     
     @Transactional
