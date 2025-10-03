@@ -1,46 +1,48 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import java.time.ZonedDateTime;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "integrante_grupo")
-public class IntegranteGrupo {
+@DynamicInsert
+@DynamicUpdate
+@Table(name = "relacion_cuenta_grupo")
+public class RelacionCuentaGrupo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "relacion_cuenta_grupo_id_seq")
+    @SequenceGenerator(name = "relacion_cuenta_grupo_id_seq", sequenceName = "relacion_cuenta_grupo_id_seq", allocationSize = 1)
     private Integer id;
 
-    @Column(name = "id_grupo")
-    private Integer idGrupo;  // CamelCase (era id_grupo)
+    private Integer idGrupo;
+    private Integer idCuenta;
+    private Boolean estado;
+    private Integer createdBy;
+    private OffsetDateTime createdDate;
+    private Integer modifiedBy;
+    private OffsetDateTime modifiedDate;
 
-    @Column(name = "email")
-    private String email;
+    public RelacionCuentaGrupo() {}
 
-    @Column(name = "estado")
-    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+    public RelacionCuentaGrupo(Integer id, Integer idGrupo, Integer idCuenta, Boolean estado,
+                               Integer createdBy, OffsetDateTime createdDate,
+                               Integer modifiedBy, OffsetDateTime modifiedDate) {
+        this.id = id;
+        this.idGrupo = idGrupo;
+        this.idCuenta = idCuenta;
+        this.estado = estado;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifiedBy = modifiedBy;
+        this.modifiedDate = modifiedDate;
+    }
 
-    @Column(name = "created_by")
-    private Integer createdBy;  // CamelCase
-
-    @CreationTimestamp
-    @Column(name = "created_date", updatable = false)
-    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
-
-    @Column(name = "modified_by")
-    private Integer modifiedBy;  // CamelCase
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
-
-    // Getters y Setters
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -48,23 +50,20 @@ public class IntegranteGrupo {
     public Integer getIdGrupo() {
         return idGrupo;
     }
-
     public void setIdGrupo(Integer idGrupo) {
         this.idGrupo = idGrupo;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getIdCuenta() {
+        return idCuenta;
     }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdCuenta(Integer idCuenta) {
+        this.idCuenta = idCuenta;
     }
 
     public Boolean getEstado() {
         return estado;
     }
-
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
@@ -72,32 +71,28 @@ public class IntegranteGrupo {
     public Integer getCreatedBy() {
         return createdBy;
     }
-
     public void setCreatedBy(Integer createdBy) {
         this.createdBy = createdBy;
     }
 
-    public ZonedDateTime getCreatedDate() {
+    public OffsetDateTime getCreatedDate() {
         return createdDate;
     }
-
-    public void setCreatedDate(ZonedDateTime createdDate) {
+    public void setCreatedDate(OffsetDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
     public Integer getModifiedBy() {
         return modifiedBy;
     }
-
     public void setModifiedBy(Integer modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
-    public ZonedDateTime getModifiedDate() {
+    public OffsetDateTime getModifiedDate() {
         return modifiedDate;
     }
-
-    public void setModifiedDate(ZonedDateTime modifiedDate) {
+    public void setModifiedDate(OffsetDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 }

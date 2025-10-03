@@ -1,40 +1,41 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "cuenta_proyecto")
+@DynamicInsert
+@DynamicUpdate
 public class CuentaProyecto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "cuenta_proyecto_id_seq")
+    @SequenceGenerator(name = "cuenta_proyecto_id_seq", sequenceName = "cuenta_proyecto_id_seq", allocationSize = 1)
     private Integer id;
 
-    @Column(name = "email")
-    private String email;
+    private Integer idProyecto;
+    private Integer idCuenta;
+    private Boolean estado;
+    private Integer createdBy;
+    private ZonedDateTime createdDate;
+    private Integer modifiedBy;
+    private ZonedDateTime modifiedDate;
 
-    @Column(name = "id_proyecto")
-    private Integer idProyecto;  // CamelCase (era id_proyecto)
+    public CuentaProyecto() {
+    }
 
-    @Column(name = "estado")
-    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
-
-    @Column(name = "created_by")
-    private Integer createdBy;  // CamelCase
-
-    @CreationTimestamp
-    @Column(name = "created_date", updatable = false)
-    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
-
-    @Column(name = "modified_by")
-    private Integer modifiedBy;  // CamelCase
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
+    public CuentaProyecto(Integer id, Integer idProyecto, Integer idCuenta, Boolean estado, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
+        this.id = id;
+        this.idProyecto = idProyecto;
+        this.idCuenta = idCuenta;
+        this.estado = estado;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifiedBy = modifiedBy;
+        this.modifiedDate = modifiedDate;
+    }
 
     // Getters y Setters
     public Integer getId() {
@@ -45,20 +46,20 @@ public class CuentaProyecto {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public Integer getIdProyecto() {
         return idProyecto;
     }
 
     public void setIdProyecto(Integer idProyecto) {
         this.idProyecto = idProyecto;
+    }
+
+    public Integer getIdCuenta() {
+        return idCuenta;
+    }
+
+    public void setIdCuenta(Integer idCuenta) {
+        this.idCuenta = idCuenta;
     }
 
     public Boolean getEstado() {
@@ -97,7 +98,4 @@ public class CuentaProyecto {
         return modifiedDate;
     }
 
-    public void setModifiedDate(ZonedDateTime modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
 }

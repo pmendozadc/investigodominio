@@ -1,40 +1,41 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "cuenta")
+@DynamicInsert
+@DynamicUpdate
 public class Cuenta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="cuenta_id_seq")
+    @SequenceGenerator(name="cuenta_id_seq", sequenceName="cuenta_id_seq", allocationSize=1)
     private Integer id;
 
-    @Column(name = "email")
     private String email;
+    private String nombreCompleto;
+    private Boolean estado;
+    private Integer createdBy;
+    private ZonedDateTime createdDate;
+    private Integer modifiedBy;
+    private ZonedDateTime modifiedDate;
 
-    @Column(name = "nombre_completo")
-    private String nombreCompleto;  // CamelCase
+    public Cuenta() {
+    }
 
-    @Column(name = "created_by")
-    private Integer createdBy;  // CamelCase
-
-    @CreationTimestamp
-    @Column(name = "created_date", updatable = false)
-    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime para TIMESTAMPTZ
-
-    @Column(name = "modified_by")
-    private Integer modifiedBy;  // CamelCase
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime para TIMESTAMPTZ
-
-    @Column(name = "estado")
-    private Boolean estado;  // Columna para borrado lógico (DEFAULT true en BD)
+    public Cuenta(Integer id, String email, String nombreCompleto, Boolean estado, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
+        this.id = id;
+        this.email = email;
+        this.nombreCompleto = nombreCompleto;
+        this.estado = estado;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifiedBy = modifiedBy;
+        this.modifiedDate = modifiedDate;
+    }
 
     // Getters y Setters
     public Integer getId() {
@@ -59,6 +60,14 @@ public class Cuenta {
 
     public void setNombreCompleto(String nombreCompleto) {
         this.nombreCompleto = nombreCompleto;
+    }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
     }
 
     public Integer getCreatedBy() {
@@ -91,13 +100,5 @@ public class Cuenta {
 
     public void setModifiedDate(ZonedDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
-    }
-
-    public Boolean getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Boolean estado) {
-        this.estado = estado;
     }
 }
