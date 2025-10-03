@@ -9,23 +9,35 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class EstadoProyecto {
+public class RelacionCuentaCopia {
 
     @Id
-    @GeneratedValue(generator="estado_proyecto_id_seq")
-    @SequenceGenerator(name="estado_proyecto_id_seq",sequenceName="estado_proyecto_id_seq", allocationSize=1)
+    @GeneratedValue(generator="relacion_cuenta_copia_id_seq")
+    @SequenceGenerator(
+            name="relacion_cuenta_copia_id_seq",
+            sequenceName="relacion_cuenta_copia_id_seq",
+            allocationSize=1
+    )
     private Integer id;
 
-    private String nombre;
+    @Column(name = "id_cuenta")
+    private Integer idCuenta;
+
+    @Column(name = "id_copia")
+    private Integer idCopia;
 
     private Boolean estado = true;
 
+    @Column(name = "created_by")
     private Integer createdBy;
 
+    @Column(name = "created_date")
     private OffsetDateTime createdDate;
 
+    @Column(name = "modified_by")
     private Integer modifiedBy;
 
+    @Column(name = "modified_date")
     private OffsetDateTime modifiedDate;
 
     // Getters y Setters
@@ -37,12 +49,20 @@ public class EstadoProyecto {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Integer getIdCuenta() {
+        return idCuenta;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setIdCuenta(Integer idCuenta) {
+        this.idCuenta = idCuenta;
+    }
+
+    public Integer getIdCopia() {
+        return idCopia;
+    }
+
+    public void setIdCopia(Integer idCopia) {
+        this.idCopia = idCopia;
     }
 
     public Boolean getEstado() {

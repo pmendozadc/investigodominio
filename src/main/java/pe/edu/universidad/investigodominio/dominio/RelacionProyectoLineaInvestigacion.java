@@ -14,7 +14,7 @@ public class RelacionProyectoLineaInvestigacion {
     @Id
     @GeneratedValue(generator="relacion_proyecto_linea_investigacion_id_seq")
     @SequenceGenerator(name="relacion_proyecto_linea_investigacion_id_seq",sequenceName="relacion_proyecto_linea_investigacion_id_seq", allocationSize=1)
-    private int id;
+    private Integer id;
 
     private Integer idProyecto;
 
@@ -31,11 +31,11 @@ public class RelacionProyectoLineaInvestigacion {
     private OffsetDateTime modifiedDate;
 
     // Getters y Setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
