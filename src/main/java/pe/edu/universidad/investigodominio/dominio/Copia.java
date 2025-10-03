@@ -1,39 +1,40 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class Grupo {
+public class Copia {
 
     @Id
-    @GeneratedValue(generator="grupo_id_seq")
-    @SequenceGenerator(name="grupo_id_seq",sequenceName="grupo_id_seq", allocationSize=1)
-
+    @GeneratedValue(generator="copia_id_seq")
+    @SequenceGenerator(name="copia_id_seq", sequenceName="copia_id_seq", allocationSize=1)
     private Integer id;
+
     private String nombre;
-    private Boolean estado = true;  // Ahora es Boolean (ya convertimos en BD)
-    private Integer datIdCarpeta;  // CamelCase (era id_carpeta)
-    private Integer createdBy;  // CamelCase
-    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
-    private Integer modifiedBy;  // CamelCase
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
+    private String responsables;
+    private String datIdDocumento;
+    private Integer idReparto;
+    private Boolean estado;
+    private Integer createdBy;
+    private ZonedDateTime createdDate;
+    private Integer modifiedBy;
+    private ZonedDateTime modifiedDate;
 
-    public Grupo() {
-
+    public Copia() {
     }
 
-    public Grupo(String nombre, Integer id, Boolean estado, Integer datIdCarpeta, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
-        this.nombre = nombre;
+    public Copia(Integer id, String nombre, String responsables, String datIdDocumento, Integer idReparto, Boolean estado, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
         this.id = id;
+        this.nombre = nombre;
+        this.responsables = responsables;
+        this.datIdDocumento = datIdDocumento;
+        this.idReparto = idReparto;
         this.estado = estado;
-        this.datIdCarpeta = datIdCarpeta;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
         this.modifiedBy = modifiedBy;
@@ -57,20 +58,36 @@ public class Grupo {
         this.nombre = nombre;
     }
 
+    public String getResponsables() {
+        return responsables;
+    }
+
+    public void setResponsables(String responsables) {
+        this.responsables = responsables;
+    }
+
+    public String getDatIdDocumento() {
+        return datIdDocumento;
+    }
+
+    public void setDatIdDocumento(String datIdDocumento) {
+        this.datIdDocumento = datIdDocumento;
+    }
+
+    public Integer getIdReparto() {
+        return idReparto;
+    }
+
+    public void setIdReparto(Integer idReparto) {
+        this.idReparto = idReparto;
+    }
+
     public Boolean getEstado() {
         return estado;
     }
 
     public void setEstado(Boolean estado) {
         this.estado = estado;
-    }
-
-    public Integer getIdCarpeta() {
-        return datIdCarpeta;
-    }
-
-    public void setIdCarpeta(Integer idCarpeta) {
-        this.datIdCarpeta = idCarpeta;
     }
 
     public Integer getCreatedBy() {

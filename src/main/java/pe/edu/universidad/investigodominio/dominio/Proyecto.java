@@ -8,9 +8,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @DynamicInsert
+@DynamicUpdate
 public class Proyecto {
 
 	@Id

@@ -3,12 +3,14 @@ package pe.edu.universidad.investigodominio.dominio;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
 
 @DynamicInsert
+@DynamicUpdate
 public class Cuenta {
 
     @Id
@@ -16,29 +18,28 @@ public class Cuenta {
     @SequenceGenerator(name="cuenta_id_seq",sequenceName="cuenta_id_seq", allocationSize=1)
 
     private Integer id;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "nombre_completo")
     private String nombreCompleto;  // CamelCase
-
-    @Column(name = "created_by")
     private Integer createdBy;  // CamelCase
-
-    @CreationTimestamp
-    @Column(name = "created_date", updatable = false)
     private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime para TIMESTAMPTZ
-
-    @Column(name = "modified_by")
     private Integer modifiedBy;  // CamelCase
-
-    @UpdateTimestamp
-    @Column(name = "modified_date")
     private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime para TIMESTAMPTZ
-
-    @Column(name = "estado")
     private Boolean estado;  // Columna para borrado lógico (DEFAULT true en BD)
+
+    public Cuenta() {
+
+    }
+
+    public Cuenta(Integer id, String email, String nombreCompleto, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate, Boolean estado) {
+        this.id = id;
+        this.email = email;
+        this.nombreCompleto = nombreCompleto;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifiedBy = modifiedBy;
+        this.modifiedDate = modifiedDate;
+        this.estado = estado;
+    }
 
     // Getters y Setters
     public Integer getId() {

@@ -1,41 +1,36 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
 @DynamicInsert
 @DynamicUpdate
-public class CuentaProyecto {
+public class TipoEtiqueta {
 
     @Id
-    @GeneratedValue(generator="cuenta_proyecto_id_seq")
-    @SequenceGenerator(name="cuenta_proyecto_id_seq",sequenceName="cuenta_proyecto_id_seq", allocationSize=1)
-
+    @GeneratedValue(generator="tipo_etiqueta_id_seq")
+    @SequenceGenerator(name="tipo_etiqueta_id_seq", sequenceName="tipo_etiqueta_id_seq", allocationSize=1)
     private Integer id;
-    private Integer idCuenta;
-    private Integer idProyecto;  // CamelCase (era id_proyecto)
-    private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
-    private Integer createdBy;  // CamelCase
-    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
-    private Integer modifiedBy;  // CamelCase
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
 
-    public CuentaProyecto() {
+    private String nombre;
+    private Boolean estado;
+    private Integer createdBy;
+    private ZonedDateTime createdDate;
+    private Integer modifiedBy;
+    private ZonedDateTime modifiedDate;
 
+    public TipoEtiqueta() {
     }
 
-    public CuentaProyecto(Integer id, Integer idCuenta, Integer idProyecto, Boolean estado, ZonedDateTime createdDate, Integer createdBy, Integer modifiedBy, ZonedDateTime modifiedDate) {
+    public TipoEtiqueta(Integer id, String nombre, Boolean estado, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
         this.id = id;
-        this.idCuenta = idCuenta;
-        this.idProyecto = idProyecto;
+        this.nombre = nombre;
         this.estado = estado;
-        this.createdDate = createdDate;
         this.createdBy = createdBy;
+        this.createdDate = createdDate;
         this.modifiedBy = modifiedBy;
         this.modifiedDate = modifiedDate;
     }
@@ -49,20 +44,12 @@ public class CuentaProyecto {
         this.id = id;
     }
 
-    public Integer getIdCuenta() {
-        return idCuenta;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setIdCuenta(Integer idCuenta) {
-        this.idCuenta = idCuenta;
-    }
-
-    public Integer getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Integer idProyecto) {
-        this.idProyecto = idProyecto;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Boolean getEstado() {
