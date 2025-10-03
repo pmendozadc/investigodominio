@@ -15,7 +15,7 @@ public class Reparto {
     @GeneratedValue(generator="reparto_id_seq")
     @SequenceGenerator(name="reparto_id_seq",sequenceName="reparto_id_seq", allocationSize=1)
     private Integer id;
-    private String idCarpetaReparto;
+    private String datIdCarpetaReparto;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
@@ -29,7 +29,7 @@ public class Reparto {
     }
 
     public String getIdCarpetaReparto() {
-        return idCarpetaReparto;
+        return datIdCarpetaReparto;
     }
 
     public OffsetDateTime getCreatedDate() {
@@ -64,8 +64,8 @@ public class Reparto {
         this.id = id;
     }
 
-    public void setIdCarpetaReparto(String idCarpetaReparto) {
-        this.idCarpetaReparto = idCarpetaReparto;
+    public void setIdCarpetaReparto(String datIdCarpetaReparto) {
+        this.datIdCarpetaReparto = datIdCarpetaReparto;
     }
 
     public void setCreatedDate(OffsetDateTime createdDate) {
