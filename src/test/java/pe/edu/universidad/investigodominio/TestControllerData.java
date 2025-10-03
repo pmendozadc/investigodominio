@@ -58,7 +58,7 @@ public class TestControllerData {
 		Map<String, Object> mapOperacion = null;
 		mapProyecto = new HashMap<>();
 		mapProyecto.put("nombre", "Proyecto de ejemplo tx 511");
-		mapProyecto.put("emailLider", "lider@gmail.com");
+		mapProyecto.put("idCuentaLider", 1001);
 		// operacion que inserta un proyecto
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "c");
@@ -69,8 +69,8 @@ public class TestControllerData {
 		listaOperaciones.add(mapOperacion);
 		mapProyecto = new HashMap<>();
 		mapProyecto.put("nombre", "Proyecto de ejemplo tx 512");
-		mapProyecto.put("emailLider", "lider@gmail.com");
-		mapProyecto.put("idHojaSeguimiento", "#keyidProyecto");
+		mapProyecto.put("idCuentaLider", 1003);
+		mapProyecto.put("datIdHojaSeguimiento", "#keyidProyecto");
 		// operacion que inserta otro proyecto que tiene un valor que llena con el id generado del proyecto anterior
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "c");
@@ -90,11 +90,11 @@ public class TestControllerData {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 	
-//	@Test
+    @Test
 	void testPostProyecto() {
 		Map<String, Object> mapProyecto = new HashMap<>();
-		mapProyecto.put("nombre", "Proyecto de ejemplo");
-		mapProyecto.put("emailLider", "lider@gmail.com");
+		mapProyecto.put("nombre", "Proyecto de ejemplo2");
+		mapProyecto.put("idCuentaLider", 1002);
         ResponseEntity<Map> response = restTemplate.postForEntity(urlapp+"/c/Proyecto", mapProyecto, Map.class);
         System.out.println("POST Response: "+response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

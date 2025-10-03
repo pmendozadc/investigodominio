@@ -1,0 +1,212 @@
+package pe.edu.universidad.investigodominio;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class TestGenerarRepartosCarlos {
+
+    private final String baseUrl = "http://localhost:9090";
+    private final String raizContexto = "/";
+    private final String urlapp = baseUrl+raizContexto;
+
+    private RestTemplate restTemplate = new RestTemplate();
+
+
+    // CRUD
+
+    // --------------------------------------------------------------------------------------------------------------
+
+    //    @Test
+    void testGet() {
+        ResponseEntity<Map> response = restTemplate.getForEntity(urlapp+"/r/Reparto/1001", Map.class);
+        System.out.println("GET Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void testPost() {
+        Map<String, Object> mapReparto = new HashMap<>();
+        mapReparto.put("nombre", "Proyecto de ejemplo2");
+        mapReparto.put("idCarpetaReparto", 1002);
+        ResponseEntity<Map> response = restTemplate.postForEntity(urlapp+"/c/Proyecto", mapReparto, Map.class);
+        System.out.println("POST Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    //    @Test
+    void testPut() {
+        Map<String, Object> mapReparto = new HashMap<>();
+        mapReparto.put("id", 1002);
+        mapReparto.put("idCarpetaReparto", "kledha084ojfSDSj91983");
+        ResponseEntity<Map> response = restTemplate.exchange(
+                urlapp+"/u/Reparto",
+                HttpMethod.PUT,
+                new HttpEntity<>(mapReparto),
+                Map.class
+        );
+        System.out.println("PUT Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    //    @Test
+    void testDelete() {
+        int id = 1006;
+        ResponseEntity<Map> response = restTemplate.exchange(
+                urlapp+"/d/Reparto/"+id,
+                HttpMethod.DELETE,
+                null,
+                Map.class
+        );
+        System.out.println("DELETE Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    //    @Test
+    void testDeleteHard() {
+        int id = 1013;
+        ResponseEntity<Map> response = restTemplate.exchange(
+                urlapp+"/dh/Reparto/"+id,
+                HttpMethod.DELETE,
+                null,
+                Map.class
+        );
+        System.out.println("DELETE HARD Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    // --------------------------------------------------------------------------------------------------------------
+
+    // -- QUERYS
+
+    @Test
+    @Order(1)
+    void testPostQuerySimple() {
+        Map<String, Object> mapQuery = new HashMap<String, Object>();
+        mapQuery.put("sql", "SELECT id, id_carpeta_reparto FROM reparto");
+        ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/q", mapQuery, List.class);
+        System.out.println("POST Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    @Order(2)
+    void testPostQueryMultiple() {
+        List<String> lstQuery = new ArrayList<String>();
+        lstQuery.add("SELECT MAX(id) FROM proyecto");
+        lstQuery.add("SELECT id FROM proyecto WHERE id < 1015");
+        lstQuery.add("SELECT id, nombre FROM proyecto");
+        Map<String, Object> mapQuery = new HashMap<String, Object>();
+        mapQuery.put("sql", lstQuery);
+        ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/q", mapQuery, List.class);
+        System.out.println("POST Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    // -- TRANSACCIONES
+    void testActualizarIdPlantillaReparto () {
+
+        List<Map<String, Object>> listaOperaciones = new ArrayList<Map<String,Object>>();
+        Map<String, Object> mapReparto = null;
+        Map<String, Object> mapOperacion = null;
+        mapReparto = new HashMap<>();
+        mapReparto.put("nombre", "Proyecto de ejemplo tx 511");
+        mapReparto.put("idCarpetaReparto", "askbvikjasb8756hkjd74jgh");
+        // operacion que inserta un proyecto
+        mapOperacion = new HashMap<>();
+        mapOperacion.put("op", "c");
+        mapOperacion.put("entidad", "Proyecto");
+        mapOperacion.put("obj", mapReparto);
+        mapOperacion.put("key", "idProyecto");
+        mapOperacion.put("ret", true);
+        listaOperaciones.add(mapOperacion);
+        mapReparto = new HashMap<>();
+        mapReparto.put("nombre", "Proyecto de ejemplo tx 512");
+        mapReparto.put("idCarpetaReparto", "askbvikjasb8756hkjd74jgh");
+        mapReparto.put("datIdHojaSeguimiento", "#keyidProyecto");
+        // operacion que inserta otro proyecto que tiene un valor que llena con el id generado del proyecto anterior
+        mapOperacion = new HashMap<>();
+        mapOperacion.put("op", "c");
+        mapOperacion.put("entidad", "Proyecto");
+        mapOperacion.put("obj", mapReparto);
+        mapOperacion.put("ret", true);
+        listaOperaciones.add(mapOperacion);
+        // operacion que elimina logicamente un proyecto
+        mapOperacion = new HashMap<>();
+        mapOperacion.put("op", "d");
+        mapOperacion.put("entidad", "Proyecto");
+        mapOperacion.put("id", 1002);
+        mapOperacion.put("ret", true);
+        listaOperaciones.add(mapOperacion);
+        ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/tx", listaOperaciones, List.class);
+        System.out.println("POST Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+
+
+
+
+
+
+
+
+    // -- EXAMPLE
+    @Test
+    @Order(3)
+    void testPostTx() {
+        List<Map<String, Object>> listaOperaciones = new ArrayList<Map<String,Object>>();
+        Map<String, Object> mapProyecto = null;
+        Map<String, Object> mapOperacion = null;
+        mapProyecto = new HashMap<>();
+        mapProyecto.put("nombre", "Proyecto de ejemplo tx 511");
+        mapProyecto.put("idCuentaLider", 1001);
+        // operacion que inserta un proyecto
+        mapOperacion = new HashMap<>();
+        mapOperacion.put("op", "c");
+        mapOperacion.put("entidad", "Proyecto");
+        mapOperacion.put("obj", mapProyecto);
+        mapOperacion.put("key", "idProyecto");
+        mapOperacion.put("ret", true);
+        listaOperaciones.add(mapOperacion);
+        mapProyecto = new HashMap<>();
+        mapProyecto.put("nombre", "Proyecto de ejemplo tx 512");
+        mapProyecto.put("idCuentaLider", 1003);
+        mapProyecto.put("datIdHojaSeguimiento", "#keyidProyecto");
+        // operacion que inserta otro proyecto que tiene un valor que llena con el id generado del proyecto anterior
+        mapOperacion = new HashMap<>();
+        mapOperacion.put("op", "c");
+        mapOperacion.put("entidad", "Proyecto");
+        mapOperacion.put("obj", mapProyecto);
+        mapOperacion.put("ret", true);
+        listaOperaciones.add(mapOperacion);
+        // operacion que elimina logicamente un proyecto
+        mapOperacion = new HashMap<>();
+        mapOperacion.put("op", "d");
+        mapOperacion.put("entidad", "Proyecto");
+        mapOperacion.put("id", 1002);
+        mapOperacion.put("ret", true);
+        listaOperaciones.add(mapOperacion);
+        ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/tx", listaOperaciones, List.class);
+        System.out.println("POST Response: "+response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+
+
+
+}
