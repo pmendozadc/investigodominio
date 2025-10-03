@@ -1,6 +1,7 @@
 package pe.edu.universidad.investigodominio.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,6 +25,12 @@ public class ControllerData {
 	private static final String strSql = "sql";
 	@Autowired
 	private ServiceGenerico serviceGenerico;
+	
+	@PostMapping("/tx")
+	public ResponseEntity postTransaccion(@RequestBody List<Map<String, Object>> lst) {
+	    List<Object> lstRetorno = serviceGenerico.ejecutarTx(lst);
+	    return ResponseEntity.ok(lstRetorno);
+	}
 	
 	@PostMapping("/c/{entidad}")
 	public ResponseEntity postEntidad(@PathVariable("entidad") String entidadNombre, @RequestBody Map<String, Object> map) {
@@ -96,15 +103,46 @@ public class ControllerData {
 	    }
 	    return ResponseEntity.ok(entidadOpt.get());
 	}
-	@PostMapping("/n")
+	
+	@PostMapping("/q")
 	public ResponseEntity consultarSQLNativo(@RequestBody Map<String, Object> map) {
-		String sql = (String) map.get(strSql);
-		if (sql == null) {
+		Object obj = map.get(strSql);
+		if (obj == null) {
 	        Map<String, String> response = new HashMap<>();
 	        response.put("mensaje", "No fue encontrado el campo sql");
 	        return ResponseEntity.badRequest().body(response);
 	    }
-	    Optional resultados = serviceGenerico.consultarNativa(sql);
-		return ResponseEntity.ok(resultados.get());
+		Object resultados = null;
+		if (obj instanceof String) {
+			String sql = (String) obj;
+			try {
+				resultados = serviceGenerico.consultarNativa(sql).get();
+			} catch (Exception e) {
+				Map<String, String> response = new HashMap<>();
+		        response.put("mensaje", e.getMessage());
+		        return ResponseEntity.badRequest().body(response);
+			}
+		} else if (obj instanceof List) {
+			List<String> lst = (List<String>) obj;
+			Object[] array = new Object[lst.size()];
+			Optional opt = null;
+			for (int i = 0; i < array.length; i++) {
+				try {
+					opt = serviceGenerico.consultarNativa(lst.get(i));
+				} catch (Exception e) {
+					Map<String, String> response = new HashMap<>();
+			        response.put("mensaje", e.getMessage());
+			        return ResponseEntity.badRequest().body(response);
+				}
+				array[i] = opt.get(); 
+			}
+			resultados = array;
+		} else {
+			Map<String, String> response = new HashMap<>();
+	        response.put("mensaje", "El valor del campo sql debe ser una cadena o un arreglo de cadenas de consultas SQL");
+	        return ResponseEntity.badRequest().body(response);
+		}
+	    
+		return ResponseEntity.ok(resultados);
 	}
 }
