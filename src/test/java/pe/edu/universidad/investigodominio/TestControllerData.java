@@ -30,7 +30,7 @@ public class TestControllerData {
 	@Order(1)
     void testPostQuerySimple() { 
 		Map<String, Object> mapQuery = new HashMap<String, Object>();
-		mapQuery.put("sql", "SELECT id, nombre FROM proyecto");
+		mapQuery.put("sql", "SELECT id, id_grupo, id_cuenta FROM relacion_cuenta_grupo Where id_grupo = 1001" );
         ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/q", mapQuery, List.class);
         System.out.println("POST Response: "+response);
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -19,7 +19,7 @@ public class Grupo {
     private Integer id;
     private String nombre;
     private Boolean estado = true;  // Ahora es Boolean (ya convertimos en BD)
-    private Integer datIdCarpeta;  // CamelCase (era id_carpeta)
+    private String datIdCarpeta;  // CamelCase (era id_carpeta)
     private Integer createdBy;  // CamelCase
     private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
     private Integer modifiedBy;  // CamelCase
@@ -29,7 +29,7 @@ public class Grupo {
 
     }
 
-    public Grupo(String nombre, Integer id, Boolean estado, Integer datIdCarpeta, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
+    public Grupo(String nombre, Integer id, Boolean estado, String datIdCarpeta, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
         this.nombre = nombre;
         this.id = id;
         this.estado = estado;
@@ -65,11 +65,11 @@ public class Grupo {
         this.estado = estado;
     }
 
-    public Integer getIdCarpeta() {
+    public String getIdCarpeta() {
         return datIdCarpeta;
     }
 
-    public void setIdCarpeta(Integer idCarpeta) {
+    public void setIdCarpeta(String idCarpeta) {
         this.datIdCarpeta = idCarpeta;
     }
 
