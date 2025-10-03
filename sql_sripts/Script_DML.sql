@@ -38,8 +38,8 @@ insert into tipo_proyecto(
 (   'Proyecto Interno 10', 1);
 
 insert into proyecto(
-    nombre, id_lider, id_carpeta, objetivo_general, fecha_inicio, fecha_fin, id_tipo_proyecto,
-    id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by
+    nombre, id_cuenta_lider, dat_id_carpeta, objetivo_general, fecha_inicio, fecha_fin, id_tipo_proyecto,
+    dat_id_hoja_seguimiento, id_grupo_asignado, id_estado_proyecto, created_by
 ) values
 (   'Proyecto 1',1001, 'asdf', 'objetivo general 1',
     null, null, 1001,

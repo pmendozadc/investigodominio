@@ -58,19 +58,21 @@ public class TestControllerData {
 		Map<String, Object> mapOperacion = null;
 		mapProyecto = new HashMap<>();
 		mapProyecto.put("nombre", "Proyecto de ejemplo tx 511");
-		mapProyecto.put("emailLider", "lider@gmail.com");
+		mapProyecto.put("idCuentaLider", 1001);
 		// operacion que inserta un proyecto
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "c");
 		mapOperacion.put("entidad", "Proyecto");
 		mapOperacion.put("obj", mapProyecto);
-		mapOperacion.put("key", "idProyecto");
+		mapOperacion.put("key", "idProyectoCarry");
 		mapOperacion.put("ret", true);
 		listaOperaciones.add(mapOperacion);
+
+        /*
 		mapProyecto = new HashMap<>();
 		mapProyecto.put("nombre", "Proyecto de ejemplo tx 512");
-		mapProyecto.put("emailLider", "lider@gmail.com");
-		mapProyecto.put("idHojaSeguimiento", "#keyidProyecto");
+        mapProyecto.put("idCuentaLider", 1001);
+		mapProyecto.put("objetivoGeneral", "#keyidProyectoCarry" );
 		// operacion que inserta otro proyecto que tiene un valor que llena con el id generado del proyecto anterior
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "c");
@@ -78,12 +80,16 @@ public class TestControllerData {
 		mapOperacion.put("obj", mapProyecto);
 		mapOperacion.put("ret", true);
 		listaOperaciones.add(mapOperacion);
+		*/
+
+
 		// operacion que elimina logicamente un proyecto
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "d");
 		mapOperacion.put("entidad", "Proyecto");
-		mapOperacion.put("id", 1002);
+		mapOperacion.put("id", 1003);
 		mapOperacion.put("ret", true);
+
 		listaOperaciones.add(mapOperacion);
 		ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/tx", listaOperaciones, List.class);
         System.out.println("POST Response: "+response);

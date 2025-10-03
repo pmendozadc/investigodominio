@@ -33,6 +33,7 @@ FROM
 WHERE
     c.contype = 'f' AND
     nsp.nspname = 'public'
+    and tbl.relname = 'proyecto'
 ORDER BY
     tbl.relname, c.conname;
 
@@ -45,10 +46,10 @@ WHERE backend_type = 'client backend';
 
 -- ---------------------------------------------------------
 
-DROP TABLE IF EXISTS documento_proyecto;
-DROP TABLE IF EXISTS proyecto_objetivo_especifico;
-DROP TABLE IF EXISTS proyecto;
-DROP TABLE IF EXISTS tipo_proyecto;
+-- DROP TABLE IF EXISTS documento_proyecto;
+-- DROP TABLE IF EXISTS proyecto_objetivo_especifico;
+-- DROP TABLE IF EXISTS proyecto;
+-- DROP TABLE IF EXISTS tipo_proyecto;
 
 -- ------- Tabla tipo_proyecto -----------------------------
 CREATE TABLE tipo_proyecto(
