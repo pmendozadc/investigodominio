@@ -13,7 +13,7 @@ public class Rol {
 	@Id
     @GeneratedValue(generator="rol_id_seq")
     @SequenceGenerator(name="rol_id_seq",sequenceName="rol_id_seq", allocationSize=1)
-	private int id;
+	private Integer id;
 	private String nombre;
 
 	private Boolean estado;
@@ -24,7 +24,7 @@ public class Rol {
 
     public Rol() {}
 
-    public Rol(int id, String nombre, Boolean estado, OffsetDateTime createdDate, OffsetDateTime modifiedDate, Integer createdBy, Integer modifiedBy) {
+    public Rol(Integer id, String nombre, Boolean estado, OffsetDateTime createdDate, OffsetDateTime modifiedDate, Integer createdBy, Integer modifiedBy) {
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;
@@ -34,10 +34,10 @@ public class Rol {
         this.modifiedBy = modifiedBy;
     }
 
-    public int getId() {
+    public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id; 
 	}
 

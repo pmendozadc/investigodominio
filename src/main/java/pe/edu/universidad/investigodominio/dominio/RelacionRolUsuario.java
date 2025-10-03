@@ -13,7 +13,7 @@ public class RelacionRolUsuario {
     @Id
     @GeneratedValue(generator="relacion_rol_usuario_id_seq")
     @SequenceGenerator(name="relacion_rol_usuario_id_seq",sequenceName="relacion_rol_usuario_id_seq", allocationSize=1)
-    private int id;
+    private Integer id;
 
     private Boolean estado;
     private OffsetDateTime createdDate;
@@ -26,7 +26,7 @@ public class RelacionRolUsuario {
 
     public RelacionRolUsuario() {}
 
-    public RelacionRolUsuario(int id, Boolean estado, Integer id_rol, Integer id_usuario, Integer modifiedBy, Integer createdBy, OffsetDateTime modifiedDate, OffsetDateTime createdDate) {
+    public RelacionRolUsuario(Integer id, Boolean estado, Integer id_rol, Integer id_usuario, Integer modifiedBy, Integer createdBy, OffsetDateTime modifiedDate, OffsetDateTime createdDate) {
         this.id = id;
         this.estado = estado;
         this.id_rol = id_rol;
@@ -37,12 +37,10 @@ public class RelacionRolUsuario {
         this.createdDate = createdDate;
     }
 
-
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
