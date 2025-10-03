@@ -11,21 +11,20 @@ public class Plantilla {
     @Id
     @GeneratedValue(generator="plantilla_id_seq")
     @SequenceGenerator(name="plantilla_id_seq",sequenceName="plantilla_id_seq", allocationSize=1)
-    private int id;
+    private Integer id;
     private String nombre;
     private String tipoDocumento;
     private String idDocumentoSinMarcadores;
     private String idDocumentoConMarcadores;
     private String idDocumentoInstrucciones;
-    private OffsetDateTime fechaCreacion;
     private OffsetDateTime createdDate;
-    private int createdBy;
+    private Integer createdBy;
     private OffsetDateTime modifiedDate;
-    private int modifiedBy;
+    private Integer modifiedBy;
     private Boolean activo;
     private Boolean estado;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -49,15 +48,11 @@ public class Plantilla {
         return idDocumentoInstrucciones;
     }
 
-    public OffsetDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
-
     public OffsetDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public int getCreatedBy() {
+    public Integer getCreatedBy() {
         return createdBy;
     }
 
@@ -65,7 +60,7 @@ public class Plantilla {
         return modifiedDate;
     }
 
-    public int getModifiedBy() {
+    public Integer getModifiedBy() {
         return modifiedBy;
     }
 
@@ -77,7 +72,7 @@ public class Plantilla {
         return estado;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -101,15 +96,11 @@ public class Plantilla {
         this.idDocumentoInstrucciones = idDocumentoInstrucciones;
     }
 
-    public void setFechaCreacion(OffsetDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
     public void setCreatedDate(OffsetDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(Integer createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -117,7 +108,7 @@ public class Plantilla {
         this.modifiedDate = modifiedDate;
     }
 
-    public void setModifiedBy(int modifiedBy) {
+    public void setModifiedBy(Integer modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 

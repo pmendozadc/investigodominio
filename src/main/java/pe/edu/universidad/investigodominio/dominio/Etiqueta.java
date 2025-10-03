@@ -7,26 +7,39 @@ import java.time.OffsetDateTime;
 
 @Entity
 @DynamicInsert
-public class Reparto {
+public class Etiqueta {
     @Id
-    @GeneratedValue(generator="reparto_id_seq")
-    @SequenceGenerator(name="reparto_id_seq",sequenceName="reparto_id_seq", allocationSize=1)
+    @GeneratedValue(generator="etiqueta_id_seq")
+    @SequenceGenerator(name="etiqueta_id_seq",sequenceName="etiqueta_id_seq", allocationSize=1)
     private Integer id;
-    private String idCarpetaReparto;
+    private String nombre;
+    private String descripcion;
+    private String color;
+    private Integer idTipoEtiqueta;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
-    private Integer idPlantilla;
-    private Boolean activo;
     private Boolean estado;
 
     public Integer getId() {
         return id;
     }
 
-    public String getIdCarpetaReparto() {
-        return idCarpetaReparto;
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public Integer getIdTipoEtiqueta() {
+        return idTipoEtiqueta;
     }
 
     public OffsetDateTime getCreatedDate() {
@@ -45,14 +58,6 @@ public class Reparto {
         return modifiedBy;
     }
 
-    public Integer getIdPlatilla() {
-        return idPlantilla;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
     public Boolean getEstado() {
         return estado;
     }
@@ -61,8 +66,20 @@ public class Reparto {
         this.id = id;
     }
 
-    public void setIdCarpetaReparto(String idCarpetaReparto) {
-        this.idCarpetaReparto = idCarpetaReparto;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setIdTipoEtiqueta(Integer idTipoEtiqueta) {
+        this.idTipoEtiqueta = idTipoEtiqueta;
     }
 
     public void setCreatedDate(OffsetDateTime createdDate) {
@@ -80,16 +97,9 @@ public class Reparto {
     public void setModifiedBy(Integer modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
-
-    public void setIdPlatilla(Integer idPlantilla) {
-        this.idPlantilla = idPlantilla;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
+    
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
+    
 }

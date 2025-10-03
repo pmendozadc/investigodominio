@@ -11,17 +11,17 @@ public class Informe {
     @Id
     @GeneratedValue(generator="informe_id_seq")
     @SequenceGenerator(name="informe_id_seq",sequenceName="informe_id_seq", allocationSize=1)
-    private int id;
+    private Integer id;
     private String nombre;
     private String idDocumento;
     private String idImagen;
     private OffsetDateTime createdDate;
-    private int createdBy;
+    private Integer createdBy;
     private OffsetDateTime modifiedDate;
-    private int modifiedBy;
+    private Integer modifiedBy;
     private Boolean estado;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -41,7 +41,7 @@ public class Informe {
         return createdDate;
     }
 
-    public int getCreatedBy() {
+    public Integer getCreatedBy() {
         return createdBy;
     }
 
@@ -49,7 +49,7 @@ public class Informe {
         return modifiedDate;
     }
 
-    public int getModifiedBy() {
+    public Integer getModifiedBy() {
         return modifiedBy;
     }
 
@@ -57,7 +57,7 @@ public class Informe {
         return estado;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -77,7 +77,7 @@ public class Informe {
         this.createdDate = createdDate;
     }
 
-    public void setCreatedBy(int createdBy) {
+    public void setCreatedBy(Integer createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -85,7 +85,7 @@ public class Informe {
         this.modifiedDate = modifiedDate;
     }
 
-    public void setModifiedBy(int modifiedBy) {
+    public void setModifiedBy(Integer modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 

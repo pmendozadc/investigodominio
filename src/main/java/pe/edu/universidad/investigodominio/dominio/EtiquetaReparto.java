@@ -7,26 +7,29 @@ import java.time.OffsetDateTime;
 
 @Entity
 @DynamicInsert
-public class Reparto {
+public class EtiquetaReparto {
     @Id
-    @GeneratedValue(generator="reparto_id_seq")
-    @SequenceGenerator(name="reparto_id_seq",sequenceName="reparto_id_seq", allocationSize=1)
+    @GeneratedValue(generator="etiqueta_reparto_id_seq")
+    @SequenceGenerator(name="etiqueta_reparto_id_seq",sequenceName="etiqueta_reparto_id_seq", allocationSize=1)
     private Integer id;
-    private String idCarpetaReparto;
+    private Integer idEtiqueta;
+    private Integer idReparto;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
-    private Integer idPlantilla;
-    private Boolean activo;
     private Boolean estado;
 
     public Integer getId() {
         return id;
     }
 
-    public String getIdCarpetaReparto() {
-        return idCarpetaReparto;
+    public Integer getIdEtiqueta() {
+        return idEtiqueta;
+    }
+
+    public Integer getIdReparto() {
+        return idReparto;
     }
 
     public OffsetDateTime getCreatedDate() {
@@ -45,14 +48,6 @@ public class Reparto {
         return modifiedBy;
     }
 
-    public Integer getIdPlatilla() {
-        return idPlantilla;
-    }
-
-    public Boolean getActivo() {
-        return activo;
-    }
-
     public Boolean getEstado() {
         return estado;
     }
@@ -61,8 +56,12 @@ public class Reparto {
         this.id = id;
     }
 
-    public void setIdCarpetaReparto(String idCarpetaReparto) {
-        this.idCarpetaReparto = idCarpetaReparto;
+    public void setIdEtiqueta(Integer idEtiqueta) {
+        this.idEtiqueta = idEtiqueta;
+    }
+
+    public void setIdReparto(Integer idReparto) {
+        this.idReparto = idReparto;
     }
 
     public void setCreatedDate(OffsetDateTime createdDate) {
@@ -81,15 +80,8 @@ public class Reparto {
         this.modifiedBy = modifiedBy;
     }
 
-    public void setIdPlatilla(Integer idPlantilla) {
-        this.idPlantilla = idPlantilla;
-    }
-
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
-    }
-
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
+
 }
