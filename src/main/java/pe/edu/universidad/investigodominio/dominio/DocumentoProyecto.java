@@ -2,12 +2,14 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.OffsetDateTime;
 
 @Table(name = "documento_proyecto")
 @Entity
 @DynamicInsert
+@DynamicUpdate
 public class DocumentoProyecto {
 
     @Id

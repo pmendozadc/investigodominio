@@ -13,7 +13,7 @@ SELECT
 FROM
     information_schema.columns
 WHERE
-    table_name = 'rol';
+    table_name = 'proyecto';
 
 -- Foreing keys and tables
 SELECT

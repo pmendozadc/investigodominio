@@ -4,10 +4,12 @@ import java.time.OffsetDateTime;
 import org.hibernate.annotations.DynamicInsert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Table(name = "proyecto")
 @Entity
 @DynamicInsert
+@DynamicUpdate
 public class Proyecto {
 
 	@Id
@@ -22,8 +24,8 @@ public class Proyecto {
 
 	@Column(name = "nombre")
 	private String nombre;
-	@Column(name = "email_lider")
-	private String emailLider;
+	@Column(name = "id_cuenta_lider")
+	private String idCuentaLider;
 	@Column(name = "id_carpeta")
 	private String idCarpeta;
 	@Column(name = "objetivo_general")
@@ -83,10 +85,6 @@ public class Proyecto {
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -95,12 +93,16 @@ public class Proyecto {
 		this.nombre = nombre;
 	}
 
-	public String getEmailLider() {
-		return emailLider;
+	public String getIdCuentaLider() {
+		return idCuentaLider;
 	}
 
-	public void setEmailLider(String emailLider) {
-		this.emailLider = emailLider;
+	public void setIdCuentaLider(String idCuentaLider) {
+		this.idCuentaLider = idCuentaLider;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getIdCarpeta() {
