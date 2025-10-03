@@ -25,7 +25,7 @@ public class Proyecto {
 	@Column(name = "nombre")
 	private String nombre;
 	@Column(name = "id_cuenta_lider")
-	private String idCuentaLider;
+	private Integer idCuentaLider;
 	@Column(name = "dat_id_carpeta")
 	private String datIdCarpeta;
 	@Column(name = "objetivo_general")
@@ -93,11 +93,11 @@ public class Proyecto {
 		this.nombre = nombre;
 	}
 
-	public String getIdCuentaLider() {
+	public Integer getIdCuentaLider() {
 		return idCuentaLider;
 	}
 
-	public void setIdCuentaLider(String idCuentaLider) {
+	public void setIdCuentaLider(Integer idCuentaLider) {
 		this.idCuentaLider = idCuentaLider;
 	}
 
