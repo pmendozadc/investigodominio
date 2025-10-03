@@ -2,15 +2,19 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "cuenta")
+
+@DynamicInsert
 public class Cuenta {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="cuenta_id_seq")
+    @SequenceGenerator(name="cuenta_id_seq",sequenceName="cuenta_id_seq", allocationSize=1)
+
     private Integer id;
 
     @Column(name = "email")

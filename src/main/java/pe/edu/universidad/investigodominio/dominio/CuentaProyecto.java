@@ -2,19 +2,22 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "cuenta_proyecto")
+@DynamicInsert
 public class CuentaProyecto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator="cuenta_proyecto_id_seq")
+    @SequenceGenerator(name="cuenta_proyecto_id_seq",sequenceName="cuenta_proyecto_id_seq", allocationSize=1)
+
     private Integer id;
 
-    @Column(name = "email")
-    private String email;
+    @Column(name = "id_cuenta")
+    private Integer idCuenta;
 
     @Column(name = "id_proyecto")
     private Integer idProyecto;  // CamelCase (era id_proyecto)
@@ -45,12 +48,12 @@ public class CuentaProyecto {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getIdCuenta() {
+        return idCuenta;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setIdCuenta(Integer idCuenta) {
+        this.idCuenta = idCuenta;
     }
 
     public Integer getIdProyecto() {
