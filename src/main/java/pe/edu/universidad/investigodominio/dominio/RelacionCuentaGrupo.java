@@ -2,43 +2,39 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
-@DynamicInsert
-@DynamicUpdate
-public class RelacionCuentaGrupo {
+@Table(name = "integrante_grupo")
+public class IntegranteGrupo {
 
     @Id
-    @GeneratedValue(generator="relacion_cuenta_grupo_id_seq")
-    @SequenceGenerator(name="relacion_cuenta_grupo_id_seq",sequenceName="relacion_cuenta_grupo_id_seq", allocationSize=1)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "id_grupo")
     private Integer idGrupo;  // CamelCase (era id_grupo)
-    private String idCuenta;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "estado")
     private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+
+    @Column(name = "created_by")
     private Integer createdBy;  // CamelCase
+
+    @CreationTimestamp
+    @Column(name = "created_date", updatable = false)
     private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
+
+    @Column(name = "modified_by")
     private Integer modifiedBy;  // CamelCase
+
+    @UpdateTimestamp
+    @Column(name = "modified_date")
     private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
-
-    public RelacionCuentaGrupo() {
-
-    }
-
-    public RelacionCuentaGrupo(Integer id, String idCuenta, Integer idGrupo, Boolean estado, ZonedDateTime createdDate, Integer createdBy, Integer modifiedBy, ZonedDateTime modifiedDate) {
-        this.id = id;
-        this.idCuenta = idCuenta;
-        this.idGrupo = idGrupo;
-        this.estado = estado;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.modifiedBy = modifiedBy;
-        this.modifiedDate = modifiedDate;
-    }
 
     // Getters y Setters
     public Integer getId() {
@@ -58,11 +54,11 @@ public class RelacionCuentaGrupo {
     }
 
     public String getEmail() {
-        return idCuenta;
+        return email;
     }
 
     public void setEmail(String email) {
-        this.idCuenta = email;
+        this.email = email;
     }
 
     public Boolean getEstado() {

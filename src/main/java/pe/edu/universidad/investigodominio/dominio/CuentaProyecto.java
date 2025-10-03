@@ -2,43 +2,39 @@ package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
-@DynamicInsert
-@DynamicUpdate
+@Table(name = "cuenta_proyecto")
 public class CuentaProyecto {
 
     @Id
-    @GeneratedValue(generator="cuenta_proyecto_id_seq")
-    @SequenceGenerator(name="cuenta_proyecto_id_seq",sequenceName="cuenta_proyecto_id_seq", allocationSize=1)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer idCuenta;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "id_proyecto")
     private Integer idProyecto;  // CamelCase (era id_proyecto)
+
+    @Column(name = "estado")
     private Boolean estado;  // Ahora es Boolean (ya convertimos en BD)
+
+    @Column(name = "created_by")
     private Integer createdBy;  // CamelCase
+
+    @CreationTimestamp
+    @Column(name = "created_date", updatable = false)
     private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
+
+    @Column(name = "modified_by")
     private Integer modifiedBy;  // CamelCase
+
+    @UpdateTimestamp
+    @Column(name = "modified_date")
     private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
-
-    public CuentaProyecto() {
-
-    }
-
-    public CuentaProyecto(Integer id, Integer idCuenta, Integer idProyecto, Boolean estado, ZonedDateTime createdDate, Integer createdBy, Integer modifiedBy, ZonedDateTime modifiedDate) {
-        this.id = id;
-        this.idCuenta = idCuenta;
-        this.idProyecto = idProyecto;
-        this.estado = estado;
-        this.createdDate = createdDate;
-        this.createdBy = createdBy;
-        this.modifiedBy = modifiedBy;
-        this.modifiedDate = modifiedDate;
-    }
 
     // Getters y Setters
     public Integer getId() {
@@ -49,12 +45,12 @@ public class CuentaProyecto {
         this.id = id;
     }
 
-    public Integer getIdCuenta() {
-        return idCuenta;
+    public String getEmail() {
+        return email;
     }
 
-    public void setIdCuenta(Integer idCuenta) {
-        this.idCuenta = idCuenta;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Integer getIdProyecto() {
