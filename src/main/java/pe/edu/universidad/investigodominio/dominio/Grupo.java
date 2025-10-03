@@ -1,35 +1,35 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.UpdateTimestamp;
 import java.time.ZonedDateTime;
 
 @Entity
+@Table(name = "grupo")  // Agregar esto
 @DynamicInsert
 @DynamicUpdate
 public class Grupo {
 
     @Id
     @GeneratedValue(generator="grupo_id_seq")
-    @SequenceGenerator(name="grupo_id_seq",sequenceName="grupo_id_seq", allocationSize=1)
+    @SequenceGenerator(name="grupo_id_seq", sequenceName="grupo_id_seq", allocationSize=1)
 
     private Integer id;
     private String nombre;
-    private Boolean estado = true;  // Ahora es Boolean (ya convertimos en BD)
-    private String datIdCarpeta;  // CamelCase (era id_carpeta)
-    private Integer createdBy;  // CamelCase
-    private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
-    private Integer modifiedBy;  // CamelCase
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
+    private Boolean estado = true;
+    private String datIdCarpeta;
+    private Integer createdBy;
+    private ZonedDateTime createdDate;
+    private Integer modifiedBy;
+    private ZonedDateTime modifiedDate;
 
     public Grupo() {
-
     }
 
-    public Grupo(String nombre, Integer id, Boolean estado, String datIdCarpeta, Integer createdBy, ZonedDateTime createdDate, Integer modifiedBy, ZonedDateTime modifiedDate) {
+    public Grupo(String nombre, Integer id, Boolean estado, String datIdCarpeta,
+                 Integer createdBy, ZonedDateTime createdDate,
+                 Integer modifiedBy, ZonedDateTime modifiedDate) {
         this.nombre = nombre;
         this.id = id;
         this.estado = estado;
@@ -65,12 +65,12 @@ public class Grupo {
         this.estado = estado;
     }
 
-    public String getIdCarpeta() {
+    public String getDatIdCarpeta() {  // ⭐ Cambia el nombre del getter
         return datIdCarpeta;
     }
 
-    public void setIdCarpeta(String idCarpeta) {
-        this.datIdCarpeta = idCarpeta;
+    public void setDatIdCarpeta(String datIdCarpeta) {  // ⭐ Cambia el nombre del setter
+        this.datIdCarpeta = datIdCarpeta;
     }
 
     public Integer getCreatedBy() {

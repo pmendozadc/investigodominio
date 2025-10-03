@@ -185,7 +185,7 @@ public class TestGrupo {
     void testPostTxDuplicarGrupoCompleto() {
         int idGrupoOriginal = 1001;
 
-        // Paso 1: Obtener los datos del grupo original
+        // Paso 1: Obtener grupo original
         ResponseEntity<Map> responseGrupoOriginal = restTemplate.getForEntity(
                 urlapp + "/r/Grupo/" + idGrupoOriginal,
                 Map.class
@@ -193,7 +193,7 @@ public class TestGrupo {
         Map<String, Object> grupoOriginal = responseGrupoOriginal.getBody();
         System.out.println("Grupo Original: " + grupoOriginal);
 
-        // Paso 2: Consultar los integrantes del grupo original
+        // Paso 2: Consultar integrantes
         Map<String, Object> mapQuery = new HashMap<>();
         mapQuery.put("sql", "SELECT id, id_grupo, id_cuenta FROM relacion_cuenta_grupo WHERE id_grupo = " + idGrupoOriginal + " AND estado = true");
 
@@ -202,22 +202,23 @@ public class TestGrupo {
                 mapQuery,
                 List.class
         );
-        List<Map<String, Object>> integrantes = responseIntegrantes.getBody();
+        List<List<Object>> integrantes = responseIntegrantes.getBody();
         System.out.println("Integrantes encontrados: " + integrantes.size());
         System.out.println("Integrantes: " + integrantes);
 
-        // Paso 3: Construir la transacción de duplicación
+        // Paso 3: Construir transacción
         List<Map<String, Object>> listaOperaciones = new ArrayList<>();
 
-        // Operación 1: Crear el nuevo grupo (copia del original)
+        // Operación 1: Crear nuevo grupo
         Map<String, Object> mapGrupoNuevo = new HashMap<>();
         mapGrupoNuevo.put("nombre", grupoOriginal.get("nombre") + " - COPIA");
-        mapGrupoNuevo.put("estado", true);  // El nuevo grupo estará activo
+        mapGrupoNuevo.put("estado", true);
 
-        // Copiar idCarpeta si existe (con sufijo para diferenciarlo)
-        if (grupoOriginal.get("idCarpeta") != null) {
-            String idCarpetaOriginal = grupoOriginal.get("idCarpeta").toString();
-            mapGrupoNuevo.put("idCarpeta", idCarpetaOriginal + "-COPY");
+        // ⭐ CAMBIO: Usar datIdCarpeta en lugar de idCarpeta
+        if (grupoOriginal.get("datIdCarpeta") != null) {
+            String idCarpetaOriginal = String.valueOf(grupoOriginal.get("datIdCarpeta"));
+            mapGrupoNuevo.put("datIdCarpeta", idCarpetaOriginal + "-COPY");
+            System.out.println("datIdCarpeta nuevo: " + idCarpetaOriginal + "-COPY");
         }
 
         Map<String, Object> operacion1 = new HashMap<>();
@@ -228,11 +229,11 @@ public class TestGrupo {
         operacion1.put("ret", true);
         listaOperaciones.add(operacion1);
 
-        // Operaciones 2-N: Copiar cada integrante activo al nuevo grupo
-        for (Map<String, Object> integrante : integrantes) {
+        // Operaciones 2-N: Agregar integrantes
+        for (List<Object> integrante : integrantes) {
             Map<String, Object> mapRelacion = new HashMap<>();
-            mapRelacion.put("idGrupo", "#keyidGrupoNuevo");  // Referencia al nuevo grupo
-            mapRelacion.put("idCuenta", integrante.get("id_cuenta"));
+            mapRelacion.put("idGrupo", "#keyidGrupoNuevo");
+            mapRelacion.put("idCuenta", integrante.get(2));  // id_cuenta está en índice 2
 
             Map<String, Object> operacion = new HashMap<>();
             operacion.put("op", "c");
@@ -242,16 +243,16 @@ public class TestGrupo {
             listaOperaciones.add(operacion);
         }
 
-        System.out.println("Total de operaciones en transacción: " + listaOperaciones.size());
+        System.out.println("Total de operaciones: " + listaOperaciones.size());
 
-        // Paso 4: Ejecutar la transacción
+        // Paso 4: Ejecutar transacción
         ResponseEntity<List> response = restTemplate.postForEntity(
                 urlapp + "/tx",
                 listaOperaciones,
                 List.class
         );
 
-        System.out.println("POST TX Response (Duplicar Grupo): " + response);
+        System.out.println("POST TX Response: " + response);
         List<?> resultados = response.getBody();
         System.out.println("Operaciones exitosas: " + resultados.size());
 
