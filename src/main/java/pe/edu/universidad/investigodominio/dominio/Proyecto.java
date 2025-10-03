@@ -1,42 +1,60 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import java.time.OffsetDateTime;
-
 import org.hibernate.annotations.DynamicInsert;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+@Table(name = "proyecto")
 @Entity
 @DynamicInsert
 @DynamicUpdate
 public class Proyecto {
 
 	@Id
-	@GeneratedValue(generator="proyecto_id_seq")
-	@SequenceGenerator(name="proyecto_id_seq",sequenceName="proyecto_id_seq", allocationSize=1)
-	private int id;
+	@GeneratedValue(generator = "proyecto_id_seq")
+	@SequenceGenerator(
+			name = "proyecto_id_seq",
+			sequenceName = "proyecto_id_seq",
+			allocationSize = 1
+	)
+	@Column(name = "id")
+	private Integer id;
 
+	@Column(name = "nombre")
 	private String nombre;
-	private String emailLider;
-	private String idCarpeta;
+	@Column(name = "id_cuenta_lider")
+	private String idCuentaLider;
+	@Column(name = "dat_id_carpeta")
+	private String datIdCarpeta;
+	@Column(name = "objetivo_general")
 	private String objetivoGeneral;
+	@Column(name = "fechaCreacion")
 	private OffsetDateTime fechaCreacion;
+	@Column(name = "fecha_inicio")
 	private OffsetDateTime fechaInicio;
+	@Column(name = "fecha_fin")
 	private OffsetDateTime fechaFin;
+	@Column(name = "estado")
 	private Boolean estado;
+	@Column(name = "dat_id_hoja_seguimiento")
+	private String datIdHojaSeguimiento;
 
-	private Integer idTipoProyecto;	
-	private Integer idHojaSeguimiento;
+	@Column(name = "id_tipo_proyecto")
+	private Integer idTipoProyecto;
+	@Column(name = "id_grupo_asignado")
 	private Integer idGrupoAsignado;
+	@Column(name = "id_estado_proyecto")
 	private Integer idEstadoProyecto;
 
+	@Column(name = "created_by")
 	private Integer createdBy;
+	@Column(name = "created_date")
 	private OffsetDateTime createdDate;
+	@Column(name = "modified_by")
 	private Integer modifiedBy;
+	@Column(name = "modified_date")
 	private OffsetDateTime modifiedDate;
 
 	public Proyecto() {
@@ -55,12 +73,16 @@ public class Proyecto {
 		this.idTipoProyecto = tipoProyecto;
 	}
 
-	public int getId() {
-		return id;
+	public OffsetDateTime getFechaFin() {
+		return fechaFin;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setFechaFin(OffsetDateTime fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 	public String getNombre() {
@@ -71,20 +93,24 @@ public class Proyecto {
 		this.nombre = nombre;
 	}
 
-	public String getEmailLider() {
-		return emailLider;
+	public String getIdCuentaLider() {
+		return idCuentaLider;
 	}
 
-	public void setEmailLider(String emailLider) {
-		this.emailLider = emailLider;
+	public void setIdCuentaLider(String idCuentaLider) {
+		this.idCuentaLider = idCuentaLider;
 	}
 
-	public String getIdCarpeta() {
-		return idCarpeta;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public void setIdCarpeta(String idCarpeta) {
-		this.idCarpeta = idCarpeta;
+	public String getDatIdCarpeta() {
+		return datIdCarpeta;
+	}
+
+	public void setDatIdCarpeta(String datIdCarpeta) {
+		this.datIdCarpeta = datIdCarpeta;
 	}
 
 	public String getObjetivoGeneral() {
@@ -111,14 +137,6 @@ public class Proyecto {
 		this.fechaInicio = fechaInicio;
 	}
 
-	public OffsetDateTime getFechaFin() {
-		return fechaFin;
-	}
-
-	public void setFechaFin(OffsetDateTime fechaFin) {
-		this.fechaFin = fechaFin;
-	}
-
 	public Integer getIdTipoProyecto() {
 		return idTipoProyecto;
 	}
@@ -135,12 +153,12 @@ public class Proyecto {
 		this.idTipoProyecto = idTipoProyecto;
 	}
 
-	public Integer getIdHojaSeguimiento() {
-		return idHojaSeguimiento;
+	public String getDatIdHojaSeguimiento() {
+		return datIdHojaSeguimiento;
 	}
 
-	public void setIdHojaSeguimiento(Integer idHojaSeguimiento) {
-		this.idHojaSeguimiento = idHojaSeguimiento;
+	public void setDatIdHojaSeguimiento(String datIdHojaSeguimiento) {
+		this.datIdHojaSeguimiento = datIdHojaSeguimiento;
 	}
 
 	public Integer getIdGrupoAsignado() {
@@ -191,5 +209,4 @@ public class Proyecto {
 		this.modifiedDate = modifiedDate;
 	}
 
-		
 }
