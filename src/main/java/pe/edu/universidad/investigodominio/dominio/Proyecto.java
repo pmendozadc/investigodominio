@@ -26,8 +26,8 @@ public class Proyecto {
 	private String nombre;
 	@Column(name = "id_cuenta_lider")
 	private String idCuentaLider;
-	@Column(name = "id_carpeta")
-	private String idCarpeta;
+	@Column(name = "dat_id_carpeta")
+	private String datIdCarpeta;
 	@Column(name = "objetivo_general")
 	private String objetivoGeneral;
 	@Column(name = "fechaCreacion")
@@ -38,8 +38,8 @@ public class Proyecto {
 	private OffsetDateTime fechaFin;
 	@Column(name = "estado")
 	private Boolean estado;
-	@Column(name = "id_hoja_seguimiento")
-	private String idHojaSeguimiento;
+	@Column(name = "dat_id_hoja_seguimiento")
+	private String datIdHojaSeguimiento;
 
 	@Column(name = "id_tipo_proyecto")
 	private Integer idTipoProyecto;
@@ -105,12 +105,12 @@ public class Proyecto {
 		this.id = id;
 	}
 
-	public String getIdCarpeta() {
-		return idCarpeta;
+	public String getDatIdCarpeta() {
+		return datIdCarpeta;
 	}
 
-	public void setIdCarpeta(String idCarpeta) {
-		this.idCarpeta = idCarpeta;
+	public void setDatIdCarpeta(String datIdCarpeta) {
+		this.datIdCarpeta = datIdCarpeta;
 	}
 
 	public String getObjetivoGeneral() {
@@ -153,12 +153,12 @@ public class Proyecto {
 		this.idTipoProyecto = idTipoProyecto;
 	}
 
-	public String getIdHojaSeguimiento() {
-		return idHojaSeguimiento;
+	public String getDatIdHojaSeguimiento() {
+		return datIdHojaSeguimiento;
 	}
 
-	public void setIdHojaSeguimiento(String idHojaSeguimiento) {
-		this.idHojaSeguimiento = idHojaSeguimiento;
+	public void setDatIdHojaSeguimiento(String datIdHojaSeguimiento) {
+		this.datIdHojaSeguimiento = datIdHojaSeguimiento;
 	}
 
 	public Integer getIdGrupoAsignado() {
