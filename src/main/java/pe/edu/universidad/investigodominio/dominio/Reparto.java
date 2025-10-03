@@ -1,7 +1,10 @@
 package pe.edu.universidad.investigodominio.dominio;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.time.OffsetDateTime;
 
