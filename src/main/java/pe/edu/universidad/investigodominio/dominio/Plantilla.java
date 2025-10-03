@@ -17,9 +17,9 @@ public class Plantilla {
     private Integer id;
     private String nombre;
     private String tipoDocumento;
-    private String idDocumentoSinMarcadores;
-    private String idDocumentoConMarcadores;
-    private String idDocumentoInstrucciones;
+    private String datIdDocumentoSinMarcadores;
+    private String datIdDocumentoConMarcadores;
+    private String datIdDocumentoInstrucciones;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
@@ -40,15 +40,15 @@ public class Plantilla {
     }
 
     public String getIdDocumentoSinMarcadores() {
-        return idDocumentoSinMarcadores;
+        return datIdDocumentoSinMarcadores;
     }
 
     public String getIdDocumentoConMarcadores() {
-        return idDocumentoConMarcadores;
+        return datIdDocumentoConMarcadores;
     }
 
     public String getIdDocumentoInstrucciones() {
-        return idDocumentoInstrucciones;
+        return datIdDocumentoInstrucciones;
     }
 
     public OffsetDateTime getCreatedDate() {
@@ -87,16 +87,16 @@ public class Plantilla {
         this.tipoDocumento = tipoDocumento;
     }
 
-    public void setIdDocumentoSinMarcadores(String idDocumentoSinMarcadores) {
-        this.idDocumentoSinMarcadores = idDocumentoSinMarcadores;
+    public void setIdDocumentoSinMarcadores(String datIdDocumentoSinMarcadores) {
+        this.datIdDocumentoSinMarcadores = datIdDocumentoSinMarcadores;
     }
 
-    public void setIdDocumentoConMarcadores(String idDocumentoConMarcadores) {
-        this.idDocumentoConMarcadores = idDocumentoConMarcadores;
+    public void setIdDocumentoConMarcadores(String datIdDocumentoConMarcadores) {
+        this.datIdDocumentoConMarcadores = datIdDocumentoConMarcadores;
     }
 
-    public void setIdDocumentoInstrucciones(String idDocumentoInstrucciones) {
-        this.idDocumentoInstrucciones = idDocumentoInstrucciones;
+    public void setIdDocumentoInstrucciones(String datIdDocumentoInstrucciones) {
+        this.datIdDocumentoInstrucciones = datIdDocumentoInstrucciones;
     }
 
     public void setCreatedDate(OffsetDateTime createdDate) {

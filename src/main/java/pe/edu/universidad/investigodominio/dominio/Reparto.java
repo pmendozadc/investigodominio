@@ -15,12 +15,13 @@ public class Reparto {
     @GeneratedValue(generator="reparto_id_seq")
     @SequenceGenerator(name="reparto_id_seq",sequenceName="reparto_id_seq", allocationSize=1)
     private Integer id;
-    private String idCarpetaReparto;
+    private String datIdCarpetaReparto;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
     private Integer idPlantilla;
+    private Integer idGrupo;
     private Boolean activo;
     private Boolean estado;
 
@@ -29,7 +30,7 @@ public class Reparto {
     }
 
     public String getIdCarpetaReparto() {
-        return idCarpetaReparto;
+        return datIdCarpetaReparto;
     }
 
     public OffsetDateTime getCreatedDate() {
@@ -52,6 +53,10 @@ public class Reparto {
         return idPlantilla;
     }
 
+    public Integer getIdGrupo() {
+        return idGrupo;
+    }
+
     public Boolean getActivo() {
         return activo;
     }
@@ -64,8 +69,8 @@ public class Reparto {
         this.id = id;
     }
 
-    public void setIdCarpetaReparto(String idCarpetaReparto) {
-        this.idCarpetaReparto = idCarpetaReparto;
+    public void setIdCarpetaReparto(String datIdCarpetaReparto) {
+        this.datIdCarpetaReparto = datIdCarpetaReparto;
     }
 
     public void setCreatedDate(OffsetDateTime createdDate) {
@@ -86,6 +91,10 @@ public class Reparto {
 
     public void setIdPlatilla(Integer idPlantilla) {
         this.idPlantilla = idPlantilla;
+    }
+
+    public void setIdGrupo(Integer idGrupo) {
+        this.idGrupo = idGrupo;
     }
 
     public void setActivo(Boolean activo) {
