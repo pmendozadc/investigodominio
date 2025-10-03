@@ -21,6 +21,7 @@ public class Reparto {
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
     private Integer idPlantilla;
+    private Integer idGrupo;
     private Boolean activo;
     private Boolean estado;
 
@@ -50,6 +51,10 @@ public class Reparto {
 
     public Integer getIdPlatilla() {
         return idPlantilla;
+    }
+
+    public Integer getIdGrupo() {
+        return idGrupo;
     }
 
     public Boolean getActivo() {
@@ -86,6 +91,10 @@ public class Reparto {
 
     public void setIdPlatilla(Integer idPlantilla) {
         this.idPlantilla = idPlantilla;
+    }
+
+    public void setIdGrupo(Integer idGrupo) {
+        this.idGrupo = idGrupo;
     }
 
     public void setActivo(Boolean activo) {
