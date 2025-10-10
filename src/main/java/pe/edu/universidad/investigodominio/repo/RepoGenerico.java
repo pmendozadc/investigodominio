@@ -31,6 +31,7 @@ public class RepoGenerico {
 	private static final String strR = "r";
 	private static final String strU = "u";
 	private static final String strD = "d";
+	private static final String strQ = "q";
 	private static final String strDh = "dh";
 	private static final String strA = "a";
 	private static final String strI = "i";
@@ -38,6 +39,9 @@ public class RepoGenerico {
 	private static final String strTrue = "true";
 	private static final String strKey = "key";
 	private static final String strNKey = "#key";
+	private static final String strSql = "sql";
+	private static final String strCorcheteIni = "[";
+	private static final String strCorcheteFin = "]";
 	
     @PersistenceContext
     private EntityManager entityManager;
@@ -128,93 +132,117 @@ public class RepoGenerico {
 			if (mapOp.get(strOp)==null) {
 				throw new EstructuraInvalidaException("La peticion debe indicar el campo op para la operacion");
 			}
-			if (mapOp.get(strEntidad)==null) {
-				throw new EstructuraInvalidaException("La peticion debe indicar el campo entidad para la entidad/tabla");
-			}
-    		String op = mapOp.get(strOp).toString();
-			String entidadNombre = mapOp.get(strEntidad).toString();
-			if (op.equals(strC)) {
-				if (mapOp.get(strObj)==null) {
-					throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
+			String op = mapOp.get(strOp).toString();
+			if (op.equals(strQ)) {
+				if (mapOp.get(strSql)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo sql para la consulta");
 				}
-				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
-				llenarKeysEnObjeto(mapObjeto, mapKeys);
-				objRetorno = insert(entidadNombre, mapObjeto);
+				String sql = mapOp.get(strSql).toString();
+				List<Object[]> lst = (List<Object[]>) consultarNativa(sql).get();
 				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
-					lstRet.add(objRetorno);
+					lstRet.add(lst);
 				}
-				Object objId = UtilClases.obtenerDato(objRetorno, strId);
-				if (mapOp.get(strKey) != null) {
-					mapKeys.put(mapOp.get(strKey).toString(), objId);
+				if (mapOp.get(strKey) != null && lst != null && !lst.isEmpty()) {
+					for (int i = 0; i < lst.size(); i++) {
+						Object objeto = lst.get(i);
+						if (objeto != null && objeto.getClass().isArray()) {
+							Object[] array = (Object[])objeto;
+							for (int j = 0; j < array.length; j++) {
+								mapKeys.put(mapOp.get(strKey).toString()+strCorcheteIni+i+strCorcheteFin+strCorcheteIni+j+strCorcheteFin, array[j]);
+							}
+						} else {
+							mapKeys.put(mapOp.get(strKey).toString()+strCorcheteIni+i+strCorcheteFin, objeto);
+						}
+					}
 				}
-			} else if (op.equals(strU)) {
-				if (mapOp.get(strObj)==null) {
-					throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
+			} else { // No es query
+				if (mapOp.get(strEntidad)==null) {
+					throw new EstructuraInvalidaException("La peticion debe indicar el campo entidad para la entidad/tabla");
 				}
-				Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
-				llenarKeysEnObjeto(mapObjeto, mapKeys);
-				objRetorno = update(entidadNombre, mapObjeto);
-				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
-					lstRet.add(objRetorno);
+				String entidadNombre = mapOp.get(strEntidad).toString();
+				if (op.equals(strC)) {
+					if (mapOp.get(strObj)==null) {
+						throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
+					}
+					Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
+					llenarKeysEnObjeto(mapObjeto, mapKeys);
+					objRetorno = insert(entidadNombre, mapObjeto);
+					if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+						lstRet.add(objRetorno);
+					}
+					Object objId = UtilClases.obtenerDato(objRetorno, strId);
+					if (mapOp.get(strKey) != null) {
+						mapKeys.put(mapOp.get(strKey).toString(), objId);
+					}
+				} else if (op.equals(strU)) {
+					if (mapOp.get(strObj)==null) {
+						throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
+					}
+					Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
+					llenarKeysEnObjeto(mapObjeto, mapKeys);
+					objRetorno = update(entidadNombre, mapObjeto);
+					if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+						lstRet.add(objRetorno);
+					}
+				} else if (op.equals(strD)) {
+					if (mapOp.get(strId)==null) {
+						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+					}
+					int id = 0;
+					try {
+						id = Integer.parseInt(mapOp.get(strId).toString());
+					} catch (Exception e) {
+						throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+					}
+					objRetorno = delete(entidadNombre, id);
+					if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+						lstRet.add(objRetorno);
+					}
+				} else if (op.equals(strDh)) {
+					if (mapOp.get(strId)==null) {
+						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+					}
+					int id = 0;
+					try {
+						id = Integer.parseInt(mapOp.get(strId).toString());
+					} catch (Exception e) {
+						throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+					}
+					objRetorno = deleteHard(entidadNombre, id);
+					if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+						lstRet.add(objRetorno);
+					}
+				} else if (op.equals(strA)) {
+					if (mapOp.get(strId)==null) {
+						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+					}
+					int id = 0;
+					try {
+						id = Integer.parseInt(mapOp.get(strId).toString());
+					} catch (Exception e) {
+						throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+					}
+					objRetorno = activar(entidadNombre, id);
+					if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+						lstRet.add(objRetorno);
+					}
+				} else if (op.equals(strI)) {
+					if (mapOp.get(strId)==null) {
+						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
+					}
+					int id = 0;
+					try {
+						id = Integer.parseInt(mapOp.get(strId).toString());
+					} catch (Exception e) {
+						throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
+					}
+					objRetorno = inactivar(entidadNombre, id);
+					if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
+						lstRet.add(objRetorno);
+					}
+				} else {
+					throw new RuntimeException("No se encontro la operacion "+op+ " como una operacion valida");
 				}
-			} else if (op.equals(strD)) {
-				if (mapOp.get(strId)==null) {
-					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
-				}
-				int id = 0;
-				try {
-					id = Integer.parseInt(mapOp.get(strId).toString());
-				} catch (Exception e) {
-					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
-				}
-				objRetorno = delete(entidadNombre, id);
-				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
-					lstRet.add(objRetorno);
-				}
-			} else if (op.equals(strDh)) {
-				if (mapOp.get(strId)==null) {
-					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
-				}
-				int id = 0;
-				try {
-					id = Integer.parseInt(mapOp.get(strId).toString());
-				} catch (Exception e) {
-					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
-				}
-				objRetorno = deleteHard(entidadNombre, id);
-				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
-					lstRet.add(objRetorno);
-				}
-			} else if (op.equals(strA)) {
-				if (mapOp.get(strId)==null) {
-					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
-				}
-				int id = 0;
-				try {
-					id = Integer.parseInt(mapOp.get(strId).toString());
-				} catch (Exception e) {
-					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
-				}
-				objRetorno = activar(entidadNombre, id);
-				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
-					lstRet.add(objRetorno);
-				}
-			} else if (op.equals(strI)) {
-				if (mapOp.get(strId)==null) {
-					throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
-				}
-				int id = 0;
-				try {
-					id = Integer.parseInt(mapOp.get(strId).toString());
-				} catch (Exception e) {
-					throw new RuntimeException("No se encontro id para la operacion "+op+ " sobre la entidad " + entidadNombre, e);
-				}
-				objRetorno = inactivar(entidadNombre, id);
-				if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
-					lstRet.add(objRetorno);
-				}
-			} else {
-				throw new RuntimeException("No se encontro la operacion "+op+ " como una operacion valida");
 			}
 		}
 		return lstRet;
