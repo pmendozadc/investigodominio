@@ -41,6 +41,7 @@ public class RepoGenerico {
 	private static final String strVar = "var";
 	private static final String strFor = "for";
 	private static final String strNKey = "#key";
+	private static final String strNVar = "#var";
 	private static final String strSql = "sql";
 	private static final String strCorcheteIni = "[";
 	private static final String strCorcheteFin = "]";
@@ -157,17 +158,52 @@ public class RepoGenerico {
 					if (mapOp.get(strObj)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
 					}
-					objRetorno=insertarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet);
-					Object objId = UtilClases.obtenerDato(objRetorno, strId);
-					if (mapOp.get(strKey) != null) {
-						mapKeys.put(mapOp.get(strKey).toString(), objId);
+					if (mapOp.get(strFor)==null) {// Operacion simple, no itera
+						objRetorno=insertarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, null, null);
+						Object objId = UtilClases.obtenerDato(objRetorno, strId);
+						if (mapOp.get(strKey) != null) {
+							mapKeys.put(mapOp.get(strKey).toString(), objId);
+						}
+					} else {// Operacion iterativa
+						String var = mapOp.get(strFor).toString();
+						if (mapVars.get(var) == null) {
+							throw new RuntimeException("El var "+var+" no fue encontrado");
+						}
+						boolean tieneKey = mapOp.get(strKey)!=null;
+						List<Integer> lstKey = null;
+						if (tieneKey) {//los key se almacenan como var, por ser varios
+							lstKey = new ArrayList<Integer>();
+							mapVars.put(mapOp.get(strKey).toString(), lstKey);
+						}
+						Map<String, Object> mapObjVars = generarMapObjVars(mapOp);
+						List lst = (List) mapVars.get(var);
+						for (int i = 0; i < lst.size(); i++) {
+							Object objIterado = lst.get(i);// obj podria ser un dato o un arreglo
+							objRetorno=insertarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, objIterado, mapObjVars);
+							Object objId = UtilClases.obtenerDato(objRetorno, strId);
+							if (tieneKey) {
+								lstKey.add((Integer) objId);
+							}
+						}
 					}
-					
 				} else if (op.equals(strU)) {
 					if (mapOp.get(strObj)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo obj para el objeto a operar");
 					}
-					objRetorno=actualizarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet);
+					if (mapOp.get(strFor)==null) {// Operacion simple, no itera
+						objRetorno=actualizarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, null, null);
+					} else {// Operacion iterativa
+						String var = mapOp.get(strFor).toString();
+						if (mapVars.get(var) == null) {
+							throw new RuntimeException("El var "+var+" no fue encontrado");
+						}
+						Map<String, Object> mapObjVars = generarMapObjVars(mapOp);
+						List lst = (List) mapVars.get(var);
+						for (int i = 0; i < lst.size(); i++) {
+							Object objIterado = lst.get(i);// obj podria ser un dato o un arreglo
+							objRetorno=actualizarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, objIterado, mapObjVars);
+						}
+					}
 				} else if (op.equals(strD)) {
 					if (mapOp.get(strId)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
@@ -257,9 +293,12 @@ public class RepoGenerico {
 	}
 
 	private Object actualizarObjeto(String entidadNombre, Map<String, Object> mapOp, Map<String, Object> mapKeys,
-			Map<String, Object> mapVars, List<Object> lstRet) {
+			Map<String, Object> mapVars, List<Object> lstRet, Object objIterado, Map<String, Object> mapObjVars) {
 		Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
 		llenarKeysEnObjeto(mapObjeto, mapKeys);
+		if (objIterado != null) {
+			llenarVarsEnObjeto(mapObjeto, objIterado, mapObjVars);
+		}
 		Object objRetorno = update(entidadNombre, mapObjeto);
 		if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
 			lstRet.add(objRetorno);
@@ -268,9 +307,12 @@ public class RepoGenerico {
 	}
 
 	private Object insertarObjeto(String entidadNombre, Map<String, Object> mapOp, Map<String, Object> mapKeys,
-			Map<String, Object> mapVars, List<Object> lstRet) {
+			Map<String, Object> mapVars, List<Object> lstRet, Object objIterado, Map<String, Object> mapObjVars) {
 		Map<String,Object> mapObjeto = (Map<String,Object>) mapOp.get(strObj);
 		llenarKeysEnObjeto(mapObjeto, mapKeys);
+		if (objIterado != null) {
+			llenarVarsEnObjeto(mapObjeto, objIterado, mapObjVars);
+		}
 		Object objRetorno = insert(entidadNombre, mapObjeto);
 		if (mapOp.get(strRet) != null && mapOp.get(strRet).toString().equals(strTrue)) {
 			lstRet.add(objRetorno);
@@ -284,8 +326,53 @@ public class RepoGenerico {
 				String key = mapObjeto.get(k).toString().substring(4);
 				if (mapKeys.get(key) != null) {
 					mapObjeto.replace(k, mapKeys.get(key));
+				} else {
+					throw new RuntimeException("El key "+key+" no fue encontrado");
 				}
 			}
 		}
 	}
+	
+	private void llenarVarsEnObjeto(Map<String, Object> mapObjeto, Object objIterado, Map<String, Object> mapObjVars) {
+		for (String k : mapObjVars.keySet()) {// Se restablecen valores de vars del mapa
+			mapObjeto.replace(k, mapObjVars.get(k));
+		}
+		for (String k : mapObjeto.keySet()) {
+			if (mapObjeto.get(k)!=null && mapObjeto.get(k).toString().startsWith(strNVar)) {
+				String cadenaValor = mapObjeto.get(k).toString();
+				Object valor = null;
+				if (cadenaValor.contains(strCorcheteIni)) {// tiene indice, eg #var[2], se tratara como un array
+					if (!objIterado.getClass().isArray()) {
+						throw new RuntimeException("Se esperaba un arreglo en un valor indexado en el objeto " + mapObjeto);
+					}
+					Object[] array = (Object[]) objIterado; 
+					try {
+						String strIndice = cadenaValor.substring(cadenaValor.indexOf(strCorcheteIni)+1, cadenaValor.indexOf(strCorcheteFin));
+						int indice = Integer.parseInt(strIndice);
+						if (indice >= array.length) {
+							throw new RuntimeException("Un indice esta fuera de rango en el objeto " + mapObjeto);
+						}
+						valor = array[indice];
+					} catch (Exception e) {
+						throw new RuntimeException("Ocurrio un error al acceder al indice de un valor en el objeto " + mapObjeto);
+					}
+				} else {// no tiene indice, se tratara como un valor 
+					valor = objIterado;
+				}
+				mapObjeto.replace(k, valor);
+			}
+		}
+	}
+	
+	private Map<String, Object> generarMapObjVars(Map<String, Object> mapOp) {
+		Map<String, Object> mapObjVars = new HashMap<String, Object>();
+		Map<String, Object> mapObj = (Map<String, Object>) mapOp.get(strObj);
+		for (String k : mapObj.keySet()) {
+			if (mapObj.get(k)!=null && mapObj.get(k).toString().startsWith(strNVar)) {
+				mapObjVars.put(k, mapObj.get(k));
+			}
+		}
+		return mapObjVars;
+	}
+
 }
