@@ -208,22 +208,70 @@ public class RepoGenerico {
 					if (mapOp.get(strId)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
 					}
-					objRetorno=eliminarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet);
+					if (mapOp.get(strFor)==null) {// Operacion simple, no itera
+						objRetorno=eliminarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, null);
+					} else {// Operacion iterativa
+						String var = mapOp.get(strFor).toString();
+						if (mapVars.get(var) == null) {
+							throw new RuntimeException("El var "+var+" no fue encontrado");
+						}
+						List lst = (List) mapVars.get(var);
+						for (int i = 0; i < lst.size(); i++) {
+							Object objIterado = lst.get(i);// obj podria ser un dato o un arreglo
+							objRetorno=eliminarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, objIterado);
+						}
+					}
 				} else if (op.equals(strDh)) {
 					if (mapOp.get(strId)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
 					}
-					objRetorno=eliminarFisicoObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet);
+					if (mapOp.get(strFor)==null) {// Operacion simple, no itera
+						objRetorno=eliminarFisicoObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, null);
+					} else {// Operacion iterativa
+						String var = mapOp.get(strFor).toString();
+						if (mapVars.get(var) == null) {
+							throw new RuntimeException("El var "+var+" no fue encontrado");
+						}
+						List lst = (List) mapVars.get(var);
+						for (int i = 0; i < lst.size(); i++) {
+							Object objIterado = lst.get(i);// obj podria ser un dato o un arreglo
+							objRetorno=eliminarFisicoObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, objIterado);
+						}
+					}
 				} else if (op.equals(strA)) {
 					if (mapOp.get(strId)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
 					}
-					objRetorno=activarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet);
+					if (mapOp.get(strFor)==null) {// Operacion simple, no itera
+						objRetorno=activarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, null);
+					} else {// Operacion iterativa
+						String var = mapOp.get(strFor).toString();
+						if (mapVars.get(var) == null) {
+							throw new RuntimeException("El var "+var+" no fue encontrado");
+						}
+						List lst = (List) mapVars.get(var);
+						for (int i = 0; i < lst.size(); i++) {
+							Object objIterado = lst.get(i);// obj podria ser un dato o un arreglo
+							objRetorno=activarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, objIterado);
+						}
+					}
 				} else if (op.equals(strI)) {
 					if (mapOp.get(strId)==null) {
 						throw new EstructuraInvalidaException("La peticion debe indicar el campo id para el codigo del objeto a operar");
 					}
-					objRetorno=inactivarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet);
+					if (mapOp.get(strFor)==null) {// Operacion simple, no itera
+						objRetorno=inactivarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, null);
+					} else {// Operacion iterativa
+						String var = mapOp.get(strFor).toString();
+						if (mapVars.get(var) == null) {
+							throw new RuntimeException("El var "+var+" no fue encontrado");
+						}
+						List lst = (List) mapVars.get(var);
+						for (int i = 0; i < lst.size(); i++) {
+							Object objIterado = lst.get(i);// obj podria ser un dato o un arreglo
+							objRetorno=inactivarObjeto(entidadNombre, mapOp, mapKeys, mapVars, lstRet, objIterado);
+						}
+					}
 				} else {
 					throw new RuntimeException("No se encontro la operacion "+op+ " como una operacion valida");
 				}
@@ -233,10 +281,17 @@ public class RepoGenerico {
 	}
 
 	private Object inactivarObjeto(String entidadNombre, Map<String, Object> mapOp, Map<String, Object> mapKeys,
-			Map<String, Object> mapVars, List<Object> lstRet) {
+			Map<String, Object> mapVars, List<Object> lstRet, Object objIterado) {
 		int id = 0;
+		String valorId = null; 
+		if (mapOp.get(strId)!=null && mapOp.get(strId).toString().startsWith(strNVar)) { // el id es una expresion #var
+			Object valor = obtenerValorVars(mapOp.get(strId).toString(), objIterado);
+			valorId = valor.toString();
+		} else { // el id no es una expresion #var
+			valorId = mapOp.get(strId).toString();
+		}
 		try {
-			id = Integer.parseInt(mapOp.get(strId).toString());
+			id = Integer.parseInt(valorId);
 		} catch (Exception e) {
 			throw new RuntimeException("No se encontro id para la operacion "+mapOp.get(strOp).toString()+ " sobre la entidad " + entidadNombre, e);
 		}
@@ -248,10 +303,17 @@ public class RepoGenerico {
 	}
 
 	private Object activarObjeto(String entidadNombre, Map<String, Object> mapOp, Map<String, Object> mapKeys,
-			Map<String, Object> mapVars, List<Object> lstRet) {
+			Map<String, Object> mapVars, List<Object> lstRet, Object objIterado) {
 		int id = 0;
+		String valorId = null; 
+		if (mapOp.get(strId)!=null && mapOp.get(strId).toString().startsWith(strNVar)) { // el id es una expresion #var
+			Object valor = obtenerValorVars(mapOp.get(strId).toString(), objIterado);
+			valorId = valor.toString();
+		} else { // el id no es una expresion #var
+			valorId = mapOp.get(strId).toString();
+		}
 		try {
-			id = Integer.parseInt(mapOp.get(strId).toString());
+			id = Integer.parseInt(valorId);
 		} catch (Exception e) {
 			throw new RuntimeException("No se encontro id para la operacion "+mapOp.get(strOp).toString()+ " sobre la entidad " + entidadNombre, e);
 		}
@@ -263,10 +325,17 @@ public class RepoGenerico {
 	}
 
 	private Object eliminarFisicoObjeto(String entidadNombre, Map<String, Object> mapOp, Map<String, Object> mapKeys,
-			Map<String, Object> mapVars, List<Object> lstRet) {
+			Map<String, Object> mapVars, List<Object> lstRet, Object objIterado) {
 		int id = 0;
+		String valorId = null; 
+		if (mapOp.get(strId)!=null && mapOp.get(strId).toString().startsWith(strNVar)) { // el id es una expresion #var
+			Object valor = obtenerValorVars(mapOp.get(strId).toString(), objIterado);
+			valorId = valor.toString();
+		} else { // el id no es una expresion #var
+			valorId = mapOp.get(strId).toString();
+		}
 		try {
-			id = Integer.parseInt(mapOp.get(strId).toString());
+			id = Integer.parseInt(valorId);
 		} catch (Exception e) {
 			throw new RuntimeException("No se encontro id para la operacion "+mapOp.get(strOp).toString()+ " sobre la entidad " + entidadNombre, e);
 		}
@@ -278,10 +347,17 @@ public class RepoGenerico {
 	}
 
 	private Object eliminarObjeto(String entidadNombre, Map<String, Object> mapOp, Map<String, Object> mapKeys,
-			Map<String, Object> mapVars, List<Object> lstRet) {
+			Map<String, Object> mapVars, List<Object> lstRet, Object objIterado) {
 		int id = 0;
+		String valorId = null; 
+		if (mapOp.get(strId)!=null && mapOp.get(strId).toString().startsWith(strNVar)) { // el id es una expresion #var
+			Object valor = obtenerValorVars(mapOp.get(strId).toString(), objIterado);
+			valorId = valor.toString();
+		} else { // el id no es una expresion #var
+			valorId = mapOp.get(strId).toString();
+		}
 		try {
-			id = Integer.parseInt(mapOp.get(strId).toString());
+			id = Integer.parseInt(valorId);
 		} catch (Exception e) {
 			throw new RuntimeException("No se encontro id para la operacion "+mapOp.get(strOp).toString()+ " sobre la entidad " + entidadNombre, e);
 		}
@@ -331,6 +407,30 @@ public class RepoGenerico {
 				}
 			}
 		}
+	}
+	
+	private Object obtenerValorVars(Object contenidoCampo, Object objIterado) {
+		String cadenaValor = contenidoCampo.toString();
+		Object valor = null;
+		if (cadenaValor.contains(strCorcheteIni)) {// tiene indice, eg #var[2], se tratara como un array
+			if (!objIterado.getClass().isArray()) {
+				throw new RuntimeException("Se esperaba un arreglo en un valor indexado en el contenido " + contenidoCampo);
+			}
+			Object[] array = (Object[]) objIterado; 
+			try {
+				String strIndice = cadenaValor.substring(cadenaValor.indexOf(strCorcheteIni)+1, cadenaValor.indexOf(strCorcheteFin));
+				int indice = Integer.parseInt(strIndice);
+				if (indice >= array.length) {
+					throw new RuntimeException("Un indice esta fuera de rango en el contenido " + contenidoCampo);
+				}
+				valor = array[indice];
+			} catch (Exception e) {
+				throw new RuntimeException("Ocurrio un error al acceder al indice de un valor en el contenido " + contenidoCampo);
+			}
+		} else {// no tiene indice, se tratara como un valor 
+			valor = objIterado;
+		}
+		return valor;
 	}
 	
 	private void llenarVarsEnObjeto(Map<String, Object> mapObjeto, Object objIterado, Map<String, Object> mapObjVars) {
