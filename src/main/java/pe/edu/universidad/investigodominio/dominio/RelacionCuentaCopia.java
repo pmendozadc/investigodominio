@@ -40,6 +40,16 @@ public class RelacionCuentaCopia {
     @Column(name = "modified_date")
     private OffsetDateTime modifiedDate;
 
+    private Boolean activo;
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
     // Getters y Setters
     public Integer getId() {
         return id;

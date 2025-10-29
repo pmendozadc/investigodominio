@@ -23,6 +23,16 @@ public class EtiquetaReparto {
     private Integer modifiedBy;
     private Boolean estado;
 
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    private Boolean activo;
+
     public Integer getId() {
         return id;
     }

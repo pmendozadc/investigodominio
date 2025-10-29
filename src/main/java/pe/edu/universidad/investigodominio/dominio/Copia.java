@@ -25,6 +25,16 @@ public class Copia {
     private Integer modifiedBy;
     private ZonedDateTime modifiedDate;
 
+    private Boolean activo;
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
     public Copia() {
     }
 
