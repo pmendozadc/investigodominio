@@ -16,8 +16,8 @@ public class Informe {
     @SequenceGenerator(name="informe_id_seq",sequenceName="informe_id_seq", allocationSize=1)
     private Integer id;
     private String nombre;
-    private String idDocumento;
-    private String idImagen;
+    private String datIdDocumento;
+    private String datIdImagen;
     private OffsetDateTime createdDate;
     private Integer createdBy;
     private OffsetDateTime modifiedDate;
@@ -33,11 +33,11 @@ public class Informe {
     }
 
     public String getIdDocumento() {
-        return idDocumento;
+        return datIdDocumento;
     }
 
     public String getIdImagen() {
-        return idImagen;
+        return datIdImagen;
     }
 
     public OffsetDateTime getCreatedDate() {
@@ -68,12 +68,12 @@ public class Informe {
         this.nombre = nombre;
     }
 
-    public void setIdDocumento(String idDocumento) {
-        this.idDocumento = idDocumento;
+    public void setIdDocumento(String datIdDocumento) {
+        this.datIdDocumento = datIdDocumento;
     }
 
-    public void setIdImagen(String idImagen) {
-        this.idImagen = idImagen;
+    public void setIdImagen(String datIdImagen) {
+        this.datIdImagen = datIdImagen;
     }
 
     public void setCreatedDate(OffsetDateTime createdDate) {

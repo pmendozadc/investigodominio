@@ -64,15 +64,13 @@ public class TestControllerData {
 		mapOperacion.put("op", "c");
 		mapOperacion.put("entidad", "Proyecto");
 		mapOperacion.put("obj", mapProyecto);
-		mapOperacion.put("key", "idProyectoCarry");
+		mapOperacion.put("key", "idProyecto");
 		mapOperacion.put("ret", true);
 		listaOperaciones.add(mapOperacion);
-
-        /*
 		mapProyecto = new HashMap<>();
 		mapProyecto.put("nombre", "Proyecto de ejemplo tx 512");
-        mapProyecto.put("idCuentaLider", 1001);
-		mapProyecto.put("objetivoGeneral", "#keyidProyectoCarry" );
+		mapProyecto.put("idCuentaLider", 1003);
+		mapProyecto.put("datIdHojaSeguimiento", "#keyidProyecto");
 		// operacion que inserta otro proyecto que tiene un valor que llena con el id generado del proyecto anterior
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "c");
@@ -80,27 +78,23 @@ public class TestControllerData {
 		mapOperacion.put("obj", mapProyecto);
 		mapOperacion.put("ret", true);
 		listaOperaciones.add(mapOperacion);
-		*/
-
-
 		// operacion que elimina logicamente un proyecto
 		mapOperacion = new HashMap<>();
 		mapOperacion.put("op", "d");
 		mapOperacion.put("entidad", "Proyecto");
-		mapOperacion.put("id", 1003);
+		mapOperacion.put("id", 1002);
 		mapOperacion.put("ret", true);
-
 		listaOperaciones.add(mapOperacion);
 		ResponseEntity<List> response = restTemplate.postForEntity(urlapp+"/tx", listaOperaciones, List.class);
         System.out.println("POST Response: "+response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 	
-//	@Test
+    @Test
 	void testPostProyecto() {
 		Map<String, Object> mapProyecto = new HashMap<>();
-		mapProyecto.put("nombre", "Proyecto de ejemplo");
-		mapProyecto.put("emailLider", "lider@gmail.com");
+		mapProyecto.put("nombre", "Proyecto de ejemplo2");
+		mapProyecto.put("idCuentaLider", 1002);
         ResponseEntity<Map> response = restTemplate.postForEntity(urlapp+"/c/Proyecto", mapProyecto, Map.class);
         System.out.println("POST Response: "+response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
