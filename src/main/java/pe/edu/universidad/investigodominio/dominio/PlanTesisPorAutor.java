@@ -10,16 +10,14 @@ import java.time.OffsetDateTime;
 
 @Entity
 @DynamicInsert
-public class PlanTesis {
+public class PlanTesisPorAutor {
     @Id
-    @GeneratedValue(generator="plan_tesis_id_seq")
-    @SequenceGenerator(name="plan_tesis_id_seq",sequenceName="plan_tesis_id_seq", allocationSize=1)
+    @GeneratedValue(generator="plan_tesis_por_autor_id_seq")
+    @SequenceGenerator(name="plan_tesis_por_autor_id_seq",sequenceName="plan_tesis_por_autor_id_seq", allocationSize=1)
     private Integer id;
     
-    private String titulo;
-    private String tema;
-    private String datDocumentoUrl;
-    private Integer idClase;
+    private Integer idPlanTesis;
+    private Integer idAutor;
     
     private OffsetDateTime createdDate;
     private Integer createdBy;
@@ -32,26 +30,20 @@ public class PlanTesis {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getTitulo() {
-		return titulo;
+	public Integer getIdPlanTesis() {
+		return idPlanTesis;
 	}
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-	public String getTema() {
-		return tema;
-	}
-	public void setTema(String tema) {
-		this.tema = tema;
-	}
-	public String getDatDocumentoUrl() {
-		return datDocumentoUrl;
-	}
-	public void setDatDocumentoUrl(String datDocumentoUrl) {
-		this.datDocumentoUrl = datDocumentoUrl;
+	public void setIdPlanTesis(Integer idPlanTesis) {
+		this.idPlanTesis = idPlanTesis;
 	}
 	public OffsetDateTime getCreatedDate() {
 		return createdDate;
+	}
+	public Integer getIdAutor() {
+		return idAutor;
+	}
+	public void setIdAutor(Integer idAutor) {
+		this.idAutor = idAutor;
 	}
 	public void setCreatedDate(OffsetDateTime createdDate) {
 		this.createdDate = createdDate;
@@ -80,12 +72,6 @@ public class PlanTesis {
 	public void setEstado(Boolean estado) {
 		this.estado = estado;
 	}
-	public Integer getIdClase() {
-		return idClase;
-	}
-	public void setIdClase(Integer idClase) {
-		this.idClase = idClase;
-	}
 	
-    
+        
 }

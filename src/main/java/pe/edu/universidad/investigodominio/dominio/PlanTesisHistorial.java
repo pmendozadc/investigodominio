@@ -10,15 +10,16 @@ import java.time.OffsetDateTime;
 
 @Entity
 @DynamicInsert
-public class PlanTesis {
+public class PlanTesisHistorial {
     @Id
-    @GeneratedValue(generator="plan_tesis_id_seq")
-    @SequenceGenerator(name="plan_tesis_id_seq",sequenceName="plan_tesis_id_seq", allocationSize=1)
+    @GeneratedValue(generator="plan_tesis_historial_id_seq")
+    @SequenceGenerator(name="plan_tesis_historial_id_seq",sequenceName="plan_tesis_historial_id_seq", allocationSize=1)
     private Integer id;
     
+    private Integer idPlanTesisOriginal;
     private String titulo;
-    private String tema;
     private String datDocumentoUrl;
+    private OffsetDateTime fechaEntrega;
     private Integer idClase;
     
     private OffsetDateTime createdDate;
@@ -38,14 +39,14 @@ public class PlanTesis {
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-	public String getTema() {
-		return tema;
-	}
-	public void setTema(String tema) {
-		this.tema = tema;
-	}
 	public String getDatDocumentoUrl() {
 		return datDocumentoUrl;
+	}
+	public Integer getIdClase() {
+		return idClase;
+	}
+	public void setIdClase(Integer idClase) {
+		this.idClase = idClase;
 	}
 	public void setDatDocumentoUrl(String datDocumentoUrl) {
 		this.datDocumentoUrl = datDocumentoUrl;
@@ -80,11 +81,17 @@ public class PlanTesis {
 	public void setEstado(Boolean estado) {
 		this.estado = estado;
 	}
-	public Integer getIdClase() {
-		return idClase;
+	public Integer getIdPlanTesisOriginal() {
+		return idPlanTesisOriginal;
 	}
-	public void setIdClase(Integer idClase) {
-		this.idClase = idClase;
+	public void setIdPlanTesisOriginal(Integer idPlanTesisOriginal) {
+		this.idPlanTesisOriginal = idPlanTesisOriginal;
+	}
+	public OffsetDateTime getFechaEntrega() {
+		return fechaEntrega;
+	}
+	public void setFechaEntrega(OffsetDateTime fechaEntrega) {
+		this.fechaEntrega = fechaEntrega;
 	}
 	
     

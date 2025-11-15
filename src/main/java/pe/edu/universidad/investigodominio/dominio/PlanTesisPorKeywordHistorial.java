@@ -10,16 +10,14 @@ import java.time.OffsetDateTime;
 
 @Entity
 @DynamicInsert
-public class PlanTesis {
+public class PlanTesisPorKeywordHistorial {
     @Id
-    @GeneratedValue(generator="plan_tesis_id_seq")
-    @SequenceGenerator(name="plan_tesis_id_seq",sequenceName="plan_tesis_id_seq", allocationSize=1)
+    @GeneratedValue(generator="plan_tesis_por_keyword_historial_id_seq")
+    @SequenceGenerator(name="plan_tesis_por_keyword_historial_id_seq",sequenceName="plan_tesis_por_keyword_historial_id_seq", allocationSize=1)
     private Integer id;
     
-    private String titulo;
-    private String tema;
-    private String datDocumentoUrl;
-    private Integer idClase;
+    private Integer idPlanTesisHistorial;
+    private Integer idKeyword;
     
     private OffsetDateTime createdDate;
     private Integer createdBy;
@@ -32,29 +30,23 @@ public class PlanTesis {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getTitulo() {
-		return titulo;
-	}
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-	public String getTema() {
-		return tema;
-	}
-	public void setTema(String tema) {
-		this.tema = tema;
-	}
-	public String getDatDocumentoUrl() {
-		return datDocumentoUrl;
-	}
-	public void setDatDocumentoUrl(String datDocumentoUrl) {
-		this.datDocumentoUrl = datDocumentoUrl;
-	}
 	public OffsetDateTime getCreatedDate() {
 		return createdDate;
 	}
+	public Integer getIdPlanTesisHistorial() {
+		return idPlanTesisHistorial;
+	}
+	public void setIdPlanTesisHistorial(Integer idPlanTesisHistorial) {
+		this.idPlanTesisHistorial = idPlanTesisHistorial;
+	}
 	public void setCreatedDate(OffsetDateTime createdDate) {
 		this.createdDate = createdDate;
+	}
+	public Integer getIdKeyword() {
+		return idKeyword;
+	}
+	public void setIdKeyword(Integer idKeyword) {
+		this.idKeyword = idKeyword;
 	}
 	public Integer getCreatedBy() {
 		return createdBy;
@@ -80,12 +72,6 @@ public class PlanTesis {
 	public void setEstado(Boolean estado) {
 		this.estado = estado;
 	}
-	public Integer getIdClase() {
-		return idClase;
-	}
-	public void setIdClase(Integer idClase) {
-		this.idClase = idClase;
-	}
 	
-    
+        
 }
