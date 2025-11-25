@@ -74,6 +74,8 @@ public class UtilClases {
 					} catch (Exception e) {
 						throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a LocalDate para el campo "+field);
 					}
+				} else if (field.getType() == double.class || field.getType() == Double.class) {
+				    valor = Double.valueOf(valor.toString());
 				}
 				field.setAccessible(true);  // permitir acceso si es privado
 				field.set(obj, valor);
