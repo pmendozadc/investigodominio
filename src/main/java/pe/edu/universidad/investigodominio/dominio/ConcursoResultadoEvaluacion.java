@@ -17,7 +17,7 @@ public class ConcursoResultadoEvaluacion {
     @SequenceGenerator(name="concurso_resultado_evaluacion_id_seq",sequenceName="concurso_resultado_evaluacion_id_seq", allocationSize=1)
     private Integer id;
 	    
-    private Integer idAsignacion;
+    private Integer idAsignacionEvaluacion;
     private Double puntajeTotal;
     private String comentarioGeneral;
     
@@ -32,14 +32,14 @@ public class ConcursoResultadoEvaluacion {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getIdAsignacion() {
-		return idAsignacion;
-	}
-	public void setIdAsignacion(Integer idAsignacion) {
-		this.idAsignacion = idAsignacion;
-	}
 	public Double getPuntajeTotal() {
 		return puntajeTotal;
+	}
+	public Integer getIdAsignacionEvaluacion() {
+		return idAsignacionEvaluacion;
+	}
+	public void setIdAsignacionEvaluacion(Integer idAsignacionEvaluacion) {
+		this.idAsignacionEvaluacion = idAsignacionEvaluacion;
 	}
 	public void setPuntajeTotal(Double puntajeTotal) {
 		this.puntajeTotal = puntajeTotal;
