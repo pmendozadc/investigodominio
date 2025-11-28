@@ -28,6 +28,10 @@ public class Concurso {
     private LocalDate fechaFinPostulacion;
     private LocalDate fechaResultado;
     private Double presupuestoMaximo;
+    private Boolean resultadosPublicados;
+    private LocalDate fechaPublicacionResultados;
+    private Boolean republicacionPermitida;
+    private Integer numeroRepublicaciones;
     
     private OffsetDateTime createdDate;
     private Integer createdBy;
@@ -106,6 +110,30 @@ public class Concurso {
 	public void setPresupuestoMaximo(Double presupuestoMaximo) {
 		this.presupuestoMaximo = presupuestoMaximo;
 	}
+	public Boolean getResultadosPublicados() {
+		return resultadosPublicados;
+	}
+	public void setResultadosPublicados(Boolean resultadosPublicados) {
+		this.resultadosPublicados = resultadosPublicados;
+	}
+	public LocalDate getFechaPublicacionResultados() {
+		return fechaPublicacionResultados;
+	}
+	public void setFechaPublicacionResultados(LocalDate fechaPublicacionResultados) {
+		this.fechaPublicacionResultados = fechaPublicacionResultados;
+	}
+	public Boolean getRepublicacionPermitida() {
+		return republicacionPermitida;
+	}
+	public void setRepublicacionPermitida(Boolean republicacionPermitida) {
+		this.republicacionPermitida = republicacionPermitida;
+	}
+	public Integer getNumeroRepublicaciones() {
+		return numeroRepublicaciones;
+	}
+	public void setNumeroRepublicaciones(Integer numeroRepublicaciones) {
+		this.numeroRepublicaciones = numeroRepublicaciones;
+	}
 	public OffsetDateTime getCreatedDate() {
 		return createdDate;
 	}
@@ -137,5 +165,6 @@ public class Concurso {
 		this.estado = estado;
 	}
 	
+    
         
 }
