@@ -32,6 +32,7 @@ public class Concurso {
     private LocalDate fechaPublicacionResultados;
     private Boolean republicacionPermitida;
     private Integer numeroRepublicaciones;
+    private Integer numeroGanadores;
     
     private OffsetDateTime createdDate;
     private Integer createdBy;
@@ -164,7 +165,10 @@ public class Concurso {
 	public void setEstado(Boolean estado) {
 		this.estado = estado;
 	}
-	
-    
-        
+	public Integer getNumeroGanadores() {
+		return numeroGanadores;
+	}
+	public void setNumeroGanadores(Integer numeroGanadores) {
+		this.numeroGanadores = numeroGanadores;
+	}	    
 }

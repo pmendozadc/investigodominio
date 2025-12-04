@@ -21,6 +21,7 @@ public class PlanTesisHistorial {
     private String datDocumentoUrl;
     private OffsetDateTime fechaEntrega;
     private Integer idClase;
+    private String tema;
     
     private OffsetDateTime createdDate;
     private Integer createdBy;
@@ -93,6 +94,11 @@ public class PlanTesisHistorial {
 	public void setFechaEntrega(OffsetDateTime fechaEntrega) {
 		this.fechaEntrega = fechaEntrega;
 	}
+	public String getTema() {
+		return tema;
+	}
+	public void setTema(String tema) {
+		this.tema = tema;
+	}
 	
-    
 }
