@@ -26,6 +26,7 @@ public class Plantilla {
     private Integer modifiedBy;
     private Boolean activo;
     private Boolean estado;
+    private String datIdCarpeta;
 
     public Integer getId() {
         return id;
