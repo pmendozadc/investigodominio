@@ -23,7 +23,8 @@ public class Grupo {
     private Integer createdBy;  // CamelCase
     private ZonedDateTime createdDate;  // CamelCase + ZonedDateTime
     private Integer modifiedBy;  // CamelCase
-    private ZonedDateTime modifiedDate;  // CamelCase + ZonedDateTime
+    private ZonedDateTime modifiedDate;
+    private Boolean activo; // CamelCase + ZonedDateTime
 
     public Grupo() {
 

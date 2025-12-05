@@ -22,6 +22,7 @@ public class Cuenta {
     private ZonedDateTime createdDate;
     private Integer modifiedBy;
     private ZonedDateTime modifiedDate;
+    private Boolean activo;
 
     public Cuenta() {
     }

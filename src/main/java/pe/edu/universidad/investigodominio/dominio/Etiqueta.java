@@ -24,6 +24,7 @@ public class Etiqueta {
     private OffsetDateTime modifiedDate;
     private Integer modifiedBy;
     private Boolean estado;
+    private Boolean activo;
 
     public Integer getId() {
         return id;
