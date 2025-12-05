@@ -3,8 +3,10 @@ package pe.edu.universidad.investigodominio.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class UtilClases {
 			for (String k : map.keySet()) {
 				String nombreCampo = k;
 				Object valor = map.get(k);
-				if (nombreCampo.startsWith(strDosPunto)) {
+				if (nombreCampo.startsWith(strDosPunto)) {// FIXME
 					ZoneId zonaLima = ZoneId.of(strAmericaLima);
 			        LocalDateTime fechaLocal = LocalDateTime.parse(valor.toString());
 			        ZonedDateTime fechaZoned = fechaLocal.atZone(zonaLima);
@@ -50,9 +52,33 @@ public class UtilClases {
 			        valor = fechaOffset;
 			        nombreCampo = nombreCampo.substring(1);
 				}
-				Field campo = obj.getClass().getDeclaredField(nombreCampo);
-				campo.setAccessible(true);  // permitir acceso si es privado
-				campo.set(obj, valor);
+				Field field = obj.getClass().getDeclaredField(nombreCampo);
+				if (field.getType().equals(OffsetDateTime.class)) {
+					try {
+						OffsetDateTime fechaHora = OffsetDateTime.parse(valor.toString());
+						valor = fechaHora;
+					} catch (Exception e) {
+						throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a OffsetDateTime para el campo "+field);
+					}
+				} else if (field.getType().equals(OffsetTime.class)) {
+					try {
+						OffsetTime hora = OffsetTime.parse(valor.toString());
+						valor = hora;
+					} catch (Exception e) {
+						throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a OffsetTime para el campo "+field);
+					}
+				} else if (field.getType().equals(LocalDate.class)) {
+					try {
+						LocalDate fecha = LocalDate.parse(valor.toString());
+						valor = fecha;
+					} catch (Exception e) {
+						throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a LocalDate para el campo "+field);
+					}
+				} else if (field.getType() == double.class || field.getType() == Double.class) {
+				    valor = Double.valueOf(valor.toString());
+				}
+				field.setAccessible(true);  // permitir acceso si es privado
+				field.set(obj, valor);
 			}
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
@@ -69,6 +95,28 @@ public class UtilClases {
 	public static Object establecerDato(Object obj, String campo, Object valor) {
 		try {
 			Field field = obj.getClass().getDeclaredField(campo);
+			if (field.getType().equals(OffsetDateTime.class)) {
+				try {
+					OffsetDateTime fechaHora = OffsetDateTime.parse(valor.toString());
+					valor = fechaHora;
+				} catch (Exception e) {
+					throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a OffsetDateTime para el campo "+field);
+				}
+			} else if (field.getType().equals(OffsetTime.class)) {
+				try {
+					OffsetTime hora = OffsetTime.parse(valor.toString());
+					valor = hora;
+				} catch (Exception e) {
+					throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a OffsetTime para el campo "+field);
+				}
+			} else if (field.getType().equals(LocalDate.class)) {
+				try {
+					LocalDate fecha = LocalDate.parse(valor.toString());
+					valor = fecha;
+				} catch (Exception e) {
+					throw new RuntimeException("Ocurrio un error al tratar de convertir "+valor.toString()+" a LocalDate para el campo "+field);
+				}
+			}
 			field.setAccessible(true);  // permitir acceso si es privado
 			field.set(obj, valor);
 		} catch (SecurityException e) {
